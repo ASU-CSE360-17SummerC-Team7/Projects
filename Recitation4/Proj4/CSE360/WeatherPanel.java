@@ -81,28 +81,28 @@ public class WeatherPanel extends JPanel
         c.gridx=0;c.gridy=0;
         c.gridheight=1;
         c.gridwidth=1;
-        c.weightx = 0.333;
-        c.weighty = 0.5;
+        c.weighty = 0.333;
+        c.weightx = 0.5;
         weatherLabel.setOpaque(true);
         weatherLabel.setBackground(Color.white);
         add(weatherLabel,c);
-        c.gridx=0;c.gridy=1;
+        c.gridx=1;c.gridy=0;
         TextSummary.setText(geoLocation.getWeatherFieldString("currently", "summary"));
         add(TextSummary,c);
         TextHumidity.setText(geoLocation.getWeatherFieldString("currently", "humidity")+"\n[Humidity]");
-        c.gridx=1;c.gridy=0;
+        c.gridx=0;c.gridy=1;
         add(TextHumidity,c);
 
-        TextTemperature.setText(geoLocation.getWeatherFieldString("currently", "temperature")+"\u00b0"+" F\n[Temperature]");
+        TextTemperature.setText(geoLocation.getWeatherFieldString("currently", "temperature")+"\u00b0"+" F\n[Temp]");
         c.gridx=1;c.gridy=1;
         add(TextTemperature,c);
 
-        TextPrecipitationProbability.setText(geoLocation.getWeatherFieldString("currently", "precipProbability")+"\n [PrecipProb]");
-        c.gridx=2;c.gridy=0;
+        TextPrecipitationProbability.setText(geoLocation.getWeatherFieldString("currently", "precipProbability")+"\n[PrecipProb]");
+        c.gridx=0;c.gridy=2;
         add(TextPrecipitationProbability,c);
 
-        TextCloudCover.setText(geoLocation.getWeatherFieldString("currently", "cloudCover")+"\n [CloudCover]");
-        c.gridx=2;c.gridy=1;
+        TextCloudCover.setText(geoLocation.getWeatherFieldString("currently", "cloudCover")+"\n[CloudCover]");
+        c.gridx=1;c.gridy=2;
         add(TextCloudCover,c);
     }
 

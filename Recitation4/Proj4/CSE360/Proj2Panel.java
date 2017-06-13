@@ -13,8 +13,14 @@ public class Proj2Panel extends JPanel{
     
     Proj2Panel()
     {
-        GridLayout grid = new GridLayout(2, 1);
-        setLayout(grid);
+        setLayout(new java.awt.GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx=0;c.gridy=0;
+        c.gridheight=1;
+        c.gridwidth=1;
+        c.weightx = 0.6666;
+        c.weighty = 1;
         setVisible(true);
         
 //        JButton choosingCity = new JButton("Choose City");
@@ -24,6 +30,7 @@ public class Proj2Panel extends JPanel{
         
         map = new googleMap(latitude, longitude);
         add(map);
+        c.gridx=1;c.weightx = 0.333;
         weather = new WeatherPanel(latitude, longitude);
         add(weather);       
     }
