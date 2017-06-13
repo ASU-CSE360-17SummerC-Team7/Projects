@@ -23,36 +23,39 @@ import javax.swing.SwingUtilities;
  * @author pdreiter
  */
 
+// original test class for Team7Ghost
+//public class Team7Ghost implements Team7Ghost {
+//    Team7Ghost y;
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public Team7Ghost() {
+//        y = new GhostAnimationLabel();
+//        this.add(y);
+//    }
+//    public GhostAnimationLabel getGhostAnimationLabel(){ return y;}
+//    
+//}
+//
 
-public class Team7Ghost extends JFrame {
-    GhostAnimationLabel y;
-    /**
-     * @param args the command line arguments
-     */
-    public Team7Ghost() {
-        y = new GhostAnimationLabel();
-        this.add(y);
-    }
-    public GhostAnimationLabel getGhostAnimationLabel(){ return y;}
-    
-}
-
-class GhostAnimationLabel extends JPanel {
+class Team7Ghost extends JPanel {
     private JLabel animation;
     private String dir;
     private int xg;
     private int yg;
     private static final int step = 10;    // how many pixels stepped in whatever direction
     private static final String iconPath="CSE360\\imagesTeam7\\ghost_";
-    JFrame pf;
-    public GhostAnimationLabel() {
+
+    public Team7Ghost() {
         
         xg=0;yg=0;
-        dir="right";
-        animation = new JLabel ("",new ImageIcon(getFullIconPath(),"Blinky"),JLabel.CENTER);
+        dir="right";//new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,java.awt.Image.SCALE_SMOOTH))
+        animation = new JLabel ("",new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(100, 100,
+                java.awt.Image.SCALE_SMOOTH)),"Blinky"),JLabel.CENTER);
         this.add(animation);
-        this.setBounds(xg,yg,1024,1024);
-        setVisible(true);
+        this.setBounds(xg,yg,300,300);
+        setVisible(false);
+        setOpaque(false);
     }
     public void setDirection(int a){ 
         switch(a) { 
@@ -101,7 +104,9 @@ class GhostAnimationLabel extends JPanel {
         else return false;
     }
     public void updateGhostAnimation() throws IOException{
-        animation.setIcon(new ImageIcon(ImageIO.read(new File(getFullIconPath()))));
+       // animation.setIcon(new ImageIcon(ImageIO.read(new File(getFullIconPath()))));
+       animation.setIcon(new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(50, 50,
+                java.awt.Image.SCALE_SMOOTH)),"Blinky"));
     }
     public String getFullIconPath(){ return iconPath+dir+".png";}
 
@@ -115,13 +120,11 @@ class GhostAnimationLabel extends JPanel {
     }
 
     public boolean isXwithinBounds(int x) { 
-        return ((x>=0) && (x+animation.getIcon().getIconWidth()<= getMaxX()));
+        return (((x-step)>=(-(getMaxX()/2))) && (x+animation.getIcon().getIconWidth()+step<= (getMaxX()/2)));
     }
     public boolean isYwithinBounds(int y) { 
-        JFrame upperFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        int max_y=upperFrame.getSize().height;
-        return ((y>=0) && ((y+animation.getIcon().getIconHeight())<= getMaxY()));
-    }         
+        return ((y>=0) && ((y+animation.getIcon().getIconHeight())+step<= getMaxY()));
+    }          
     public void updateGhostCoordinates(int x,int y) {
         xg=x;yg=y;
         setLocation(xg,yg);
@@ -138,8 +141,8 @@ class GhostAnimationLabel extends JPanel {
 }
 
     class ghostAnimationLoop implements Runnable {
-        private final GhostAnimationLabel gal;
-        public ghostAnimationLoop(GhostAnimationLabel g){
+        private final Team7Ghost gal;
+        public ghostAnimationLoop(Team7Ghost g){
             gal=g;
         }
         @Override
@@ -155,22 +158,22 @@ class GhostAnimationLabel extends JPanel {
                     }
                     //pause for 0.1 seconds
                     Thread.sleep(100);
-                    System.out.println(gal.getFullIconPath());
+                    //System.out.println(gal.getFullIconPath());
                     try {
                         boolean validMove = gal.moveGhost(); 
                         // if it's not a valid move within boundaries of the frame, then don't move, but regenerate random direction on next loop
                         if(validMove==false){ 
                             moveCtr=0; 
-                            System.out.println("("+Integer.toString(gal.getXloc())+","+Integer.toString(gal.getYloc())+")\n => MAX: "+Integer.toString(gal.getMaxX())+","+Integer.toString(gal.getMaxY())+")");
+                            //System.out.println("("+Integer.toString(gal.getXloc())+","+Integer.toString(gal.getYloc())+")\n => MAX: "+Integer.toString(gal.getMaxX())+","+Integer.toString(gal.getMaxY())+")");
                         } 
                         
                         gal.updateGhostAnimation();
                     } catch (IOException ex) {
-                        Logger.getLogger(GhostAnimationLabel.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Team7Ghost.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     i=(++i)%100;moveCtr--;
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(GhostAnimationLabel.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Team7Ghost.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

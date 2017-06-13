@@ -45,6 +45,7 @@ public class WeatherPanel extends JPanel
     private javax.swing.JTextArea TextPrecipitationProbability;
     private javax.swing.JTextArea TextTemperature;
     private javax.swing.JTextArea TextHumidity;
+    private static final String iconPath = "CSE360\\imagesTeam7\\";
     // End of variables declaration 
     /**
      * Creates new form WeatherPanel
@@ -52,6 +53,7 @@ public class WeatherPanel extends JPanel
     public WeatherPanel(double latitude, double longitude)  {
         geoLocation = new WeatherInfo(latitude,longitude);
         initComponents();
+        setOpaque(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -67,7 +69,7 @@ public class WeatherPanel extends JPanel
         TextPrecipitationProbability.setFont(uniformFont);
         TextCloudCover = new javax.swing.JTextArea(2,10);
         TextCloudCover.setFont(uniformFont);
-        weatherIcon = new ImageIcon("CSE360\\imagesTeam7\\"+geoLocation.getWeatherFieldString("currently","icon")+".png");
+        weatherIcon = new ImageIcon(iconPath+geoLocation.getWeatherFieldString("currently","icon")+".png");
         
         weatherLabel = new JLabel("", weatherIcon, JLabel.CENTER);
         weatherLabel.setIcon(weatherIcon);
@@ -79,7 +81,7 @@ public class WeatherPanel extends JPanel
         c.gridwidth=1;
         c.weightx = 0.333;
         c.weighty = 0.5;
-
+        weatherLabel.setOpaque(false);
         add(weatherLabel,c);
         c.gridx=0;c.gridy=1;
         TextSummary.setText(geoLocation.getWeatherFieldString("currently", "summary"));
@@ -103,6 +105,15 @@ public class WeatherPanel extends JPanel
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+    }
+    public void updateWeatherPanel(double latitude,double longitude) { 
+        geoLocation.UpdateGeoLocation(latitude, longitude);
+        weatherLabel.setIcon(new ImageIcon(iconPath+geoLocation.getWeatherFieldString("currently","icon")+".png"));
+        TextSummary.setText(geoLocation.getWeatherFieldString("currently", "summary"));
+        TextHumidity.setText(geoLocation.getWeatherFieldString("currently", "humidity")+"\n[Humidity]");
+        TextTemperature.setText(geoLocation.getWeatherFieldString("currently", "temperature")+"\u00b0"+" F\n[Temperature]");
+        TextPrecipitationProbability.setText(geoLocation.getWeatherFieldString("currently", "precipProbability")+"\n [PrecipProb]");
+        TextCloudCover.setText(geoLocation.getWeatherFieldString("currently", "cloudCover")+"\n [CloudCover]");
     }
 }
 

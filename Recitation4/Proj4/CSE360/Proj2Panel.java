@@ -13,7 +13,7 @@ public class Proj2Panel extends JPanel{
     
     Proj2Panel()
     {
-        GridLayout grid = new GridLayout(1, 2);
+        GridLayout grid = new GridLayout(2, 1);
         setLayout(grid);
         setVisible(true);
         
@@ -24,14 +24,10 @@ public class Proj2Panel extends JPanel{
         
         map = new googleMap(latitude, longitude);
         add(map);
-        
         weather = new WeatherPanel(latitude, longitude);
         add(weather);       
     }
-    private class cityChoosingListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
+    public void DisplayGeoMenu() {
             result = (String)JOptionPane.showInputDialog(
                     null,
                     "Select a city:",
@@ -92,24 +88,24 @@ public class Proj2Panel extends JPanel{
                 longitude = -122.3321;
             }
             
-            remove(map);
-            map = new googleMap(latitude, longitude);
-            add(map);
             
+            map.updateMap(latitude, longitude);
+            weather.updateWeatherPanel(latitude, longitude);
             //remove(weather);
             //weather = new WeatherPanel(latitude, longitude);
             //add(weather);
             
             revalidate();
             repaint();
-            startGhostMovement();
         }
-
-        private void startGhostMovement() {
-            Team7Ghost u = new Team7Ghost();
-            Thread ta = new Thread(new ghostAnimationLoop(u.getGhostAnimationLabel()));
-//        tl.start();
-        ta.start();
+    private class cityChoosingListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            DisplayGeoMenu();
         }
     }
+
+
+    
 }

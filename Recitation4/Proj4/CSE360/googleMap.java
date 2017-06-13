@@ -17,8 +17,26 @@ import java.nio.charset.Charset;
 
 class googleMap extends JPanel{
     double latitude,longitude;
+    private JLabel map;
     //constructor
     public googleMap(double latitude, double longitude)     {
+    	updateGeoLoc(latitude,longitude);
+        //add(new JLabel(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(250, 250,
+                //java.awt.Image.SCALE_SMOOTH))));
+        //setVisible(true);
+        map =new JLabel(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,
+                java.awt.Image.SCALE_SMOOTH))); 
+        add(map);
+        setVisible(true);
+        setOpaque(false);
+    }
+    public void updateMap(double latitude, double longitude) { 
+        updateGeoLoc(latitude,longitude);
+        map.setIcon(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,
+                java.awt.Image.SCALE_SMOOTH)));
+        this.revalidate(); this.repaint();
+    }
+    private void updateGeoLoc(double latitude, double longitude)     {
     	this.latitude = latitude;
     	this.longitude = longitude;
     	
@@ -45,11 +63,5 @@ class googleMap extends JPanel{
         } catch (IOException e) {
             System.exit(1);
         }
-        //add(new JLabel(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(250, 250,
-                //java.awt.Image.SCALE_SMOOTH))));
-        //setVisible(true);
-        add(new JLabel(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,
-                java.awt.Image.SCALE_SMOOTH))));
-        setVisible(true);
-}
+    }
 }
