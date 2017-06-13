@@ -24,7 +24,7 @@ public class Team7Cover extends JPanel{
  //       JFrame upperFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         settings = new JLabel ("",new ImageIcon(iconPath,"Gear Icon"),JLabel.CENTER);
         this.add(settings);
-        this.setBounds(300,200,200,200); //upperFrame.getSize().width/2,upperFrame.getSize().height,512,512);
+        this.setBounds(100,100,200,200); //upperFrame.getSize().width/2,upperFrame.getSize().height,512,512);
         setVisible(false);
         setOpaque(false);
         settings.addMouseListener(new MouseAdapter(){
