@@ -15,11 +15,11 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-class googleMap extends JPanel{
+class Team7googleMap extends JPanel{
     double latitude,longitude;
     private JLabel map;
     //constructor
-    public googleMap(double latitude, double longitude)     {
+    public Team7googleMap(double latitude, double longitude)     {
     	updateGeoLoc(latitude,longitude);
         //add(new JLabel(new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(250, 250,
                 //java.awt.Image.SCALE_SMOOTH))));

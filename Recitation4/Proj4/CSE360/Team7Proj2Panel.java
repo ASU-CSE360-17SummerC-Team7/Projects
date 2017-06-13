@@ -4,14 +4,14 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Proj2Panel extends JPanel{
+public class Team7Proj2Panel extends JPanel{
     String result;
     Object[] cityList = {"Tempe", "New York", "LA", "Chicago", "Houston", "Dallas", "Austin", "Detroit", "Boston", "Seattle"};
     double latitude = 33.4255, longitude = -111.9400;
-    WeatherPanel weather;
-    googleMap map;
+    Team7WeatherPanel weather;
+    Team7googleMap map;
     
-    Proj2Panel()
+    Team7Proj2Panel()
     {
         setLayout(new java.awt.GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -28,10 +28,10 @@ public class Proj2Panel extends JPanel{
 //        add(choosingCity);
         
         
-        map = new googleMap(latitude, longitude);
+        map = new Team7googleMap(latitude, longitude);
         add(map);
         c.gridx=1;c.weightx = 0.333;
-        weather = new WeatherPanel(latitude, longitude);
+        weather = new Team7WeatherPanel(latitude, longitude);
         add(weather);       
     }
     public void DisplayGeoMenu() {
@@ -99,7 +99,7 @@ public class Proj2Panel extends JPanel{
             map.updateMap(latitude, longitude);
             weather.updateWeatherPanel(latitude, longitude);
             //remove(weather);
-            //weather = new WeatherPanel(latitude, longitude);
+            //weather = new Team7WeatherPanel(latitude, longitude);
             //add(weather);
             
             revalidate();

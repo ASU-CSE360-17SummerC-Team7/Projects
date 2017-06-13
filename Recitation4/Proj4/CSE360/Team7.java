@@ -8,27 +8,29 @@ public class Team7 extends JPanel
 {
     JLayeredPane layer;
     Team7Cover p1;
-    Proj2Panel p2;
-    OverlayObject gear;
+    Team7Proj2Panel p2;
+    Team7OverlayObject gear;
     Team7Ghost ghost;
     boolean initialState;
+    private static int xbound=300;
+    private static int ybound=200;
 
     public Team7()
     {
         initialState=true;
-        this.setPreferredSize(new Dimension(300, 300));
+        this.setPreferredSize(new Dimension(xbound, ybound));
         setOpaque(false);
         layer = new JLayeredPane();
-        layer.setPreferredSize(new Dimension(300, 300));
+        layer.setPreferredSize(new Dimension(xbound, ybound));
         
         p1 = new Team7Cover();
-        p1.setSize(new Dimension(300, 300));
+        p1.setSize(new Dimension(xbound, ybound));
         
-        p2 = new Proj2Panel();
-        p2.setSize(new Dimension(300, 300));
+        p2 = new Team7Proj2Panel();
+        p2.setSize(new Dimension(xbound, ybound));
         
-        gear = new OverlayObject();
-        ghost = new Team7Ghost();
+        gear = new Team7OverlayObject(xbound, ybound);
+        ghost = new Team7Ghost(xbound, ybound);
         gear.addMouseListener(new MouseAdapter(){
           @Override
           public void mouseClicked(MouseEvent e) { 

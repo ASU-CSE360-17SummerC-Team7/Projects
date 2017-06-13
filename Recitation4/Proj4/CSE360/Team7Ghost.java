@@ -46,14 +46,14 @@ class Team7Ghost extends JPanel {
     private static final int step = 10;    // how many pixels stepped in whatever direction
     private static final String iconPath="CSE360\\imagesTeam7\\ghost_";
 
-    public Team7Ghost() {
+    public Team7Ghost(int xbound,int ybound) {
         
         xg=0;yg=0;
         dir="right";//new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,java.awt.Image.SCALE_SMOOTH))
         animation = new JLabel ("",new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(50, 50,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"),JLabel.CENTER);
         this.add(animation);
-        this.setBounds(xg,yg,300,300);
+        this.setBounds(xg,yg,xbound,ybound);
         setVisible(false);
         setOpaque(false);
     }
