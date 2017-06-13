@@ -50,7 +50,7 @@ class Team7Ghost extends JPanel {
         
         xg=0;yg=0;
         dir="right";//new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,java.awt.Image.SCALE_SMOOTH))
-        animation = new JLabel ("",new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(100, 100,
+        animation = new JLabel ("",new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(50, 50,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"),JLabel.CENTER);
         this.add(animation);
         this.setBounds(xg,yg,300,300);

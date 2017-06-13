@@ -58,6 +58,7 @@ public class WeatherPanel extends JPanel
 
     @SuppressWarnings("unchecked")
     private void initComponents()  {
+        setBackground(Color.white);
         Font uniformFont = new Font("Courier",Font.TRUETYPE_FONT,9);
         TextSummary = new javax.swing.JTextArea(2,10);
         TextSummary.setFont(uniformFont);
@@ -73,6 +74,7 @@ public class WeatherPanel extends JPanel
         
         weatherLabel = new JLabel("", weatherIcon, JLabel.CENTER);
         weatherLabel.setIcon(weatherIcon);
+        
         setLayout(new java.awt.GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -81,7 +83,8 @@ public class WeatherPanel extends JPanel
         c.gridwidth=1;
         c.weightx = 0.333;
         c.weighty = 0.5;
-        weatherLabel.setOpaque(false);
+        weatherLabel.setOpaque(true);
+        weatherLabel.setBackground(Color.white);
         add(weatherLabel,c);
         c.gridx=0;c.gridy=1;
         TextSummary.setText(geoLocation.getWeatherFieldString("currently", "summary"));
