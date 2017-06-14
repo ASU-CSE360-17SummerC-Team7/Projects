@@ -5,6 +5,7 @@
  */
 package CSE360;
 
+
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import javax.swing.SwingUtilities;
 /**
  *
  * @author pdreiter
+ * @modified ghost moving to make sure it is always in the panel (Chen)
  */
 
 // original test class for Team7Ghost
@@ -38,17 +40,23 @@ import javax.swing.SwingUtilities;
 //}
 //
 
-class Team7Ghost extends JPanel {
+//about the moving, the origin is the center point of the top height
+class Team7Ghost extends JPanel 
+{
     private JLabel animation;
     private String dir;
     private int xg;
     private int yg;
+    public int xbound, ybound;
     private static final int step = 10;    // how many pixels stepped in whatever direction
-    private static final String iconPath="CSE360\\imagesTeam7\\ghost_";
+    private static final String iconPath="imagesTeam7/ghost_";
 
-    public Team7Ghost(int xbound,int ybound) {
+    public Team7Ghost(int xbound,int ybound) 
+    {
         
         xg=0;yg=0;
+        this.xbound = xbound;
+        this.ybound = ybound;
         dir="right";//new ImageIcon((new ImageIcon("mycity.jpg")).getImage().getScaledInstance(200, 200,java.awt.Image.SCALE_SMOOTH))
         animation = new JLabel ("",new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(50, 50,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"),JLabel.CENTER);
@@ -56,6 +64,7 @@ class Team7Ghost extends JPanel {
         this.setBounds(xg,yg,xbound,ybound);
         setVisible(false);
         setOpaque(false);
+      
     }
     public void setDirection(int a){ 
         switch(a) { 
@@ -88,19 +97,23 @@ class Team7Ghost extends JPanel {
         }
     }
     public boolean moveGhostRight() { 
-        if(isXwithinBounds(xg+step)) { updateGhostCoordinates(xg+step,yg); return true;}
+        //if(isXwithinBounds(xg+step)) 
+        if((xg+step+animation.getIcon().getIconWidth()/2)<= xbound/2){ updateGhostCoordinates(xg+step,yg); return true;}
         else return false;
     }
     public boolean moveGhostLeft() { 
-        if(isXwithinBounds(xg-step)) { updateGhostCoordinates(xg-step,yg); return true;}
+        //if(isXwithinBounds(xg-step))
+        if((xg-step-animation.getIcon().getIconWidth()/2)>=(-xbound/2)){ updateGhostCoordinates(xg-step,yg); return true;}
         else return false;
     }
     public boolean moveGhostUp() { 
-        if(isYwithinBounds(yg-step)) { updateGhostCoordinates(xg,yg-step); return true;}
+        //if(isYwithinBounds(yg-step))
+    	if((yg-step)>=0){ updateGhostCoordinates(xg,yg-step); return true;}
         else return false;
     }
     public boolean moveGhostDown() { 
-        if(isYwithinBounds(yg+step)) { updateGhostCoordinates(xg,yg+step); return true;}
+        //if(isYwithinBounds(yg+step))
+        if((yg+step+animation.getIcon().getIconHeight())<=ybound){ updateGhostCoordinates(xg,yg+step); return true;}
         else return false;
     }
     public void updateGhostAnimation() throws IOException{
@@ -108,23 +121,28 @@ class Team7Ghost extends JPanel {
        animation.setIcon(new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(50, 50,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"));
     }
-    public String getFullIconPath(){ return iconPath+dir+".png";}
+    public String getFullIconPath(){ 
+    	System.out.println("Getting image from "+ iconPath +dir+".png");
+    	return iconPath+dir+".png";}
 
-    public int getMaxX() { 
+    /*public int getMaxX() { 
         JFrame upperFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        System.out.println(upperFrame.getSize().width);
         return upperFrame.getSize().width;
     }
     public int getMaxY() { 
         JFrame upperFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        System.out.println(upperFrame.getSize().height);
         return upperFrame.getSize().height;
     }
 
     public boolean isXwithinBounds(int x) { 
-        return (((x-step)>=(-(getMaxX()/2))) && (x+animation.getIcon().getIconWidth()+step<= (getMaxX()/2)));
+        return (((x-animation.getIcon().getIconWidth())>=(-(getMaxX()/2))) && (x+animation.getIcon().getIconWidth()<= (getMaxX()/2)));
     }
     public boolean isYwithinBounds(int y) { 
-        return ((y>=0) && ((y+animation.getIcon().getIconHeight())+step<= getMaxY()));
-    }          
+        return (((y-animation.getIcon().getIconHeight())>=(-getMaxY()))&& ((y+animation.getIcon().getIconHeight())<= 0));
+    }     
+    */     
     public void updateGhostCoordinates(int x,int y) {
         xg=x;yg=y;
         setLocation(xg,yg);
@@ -139,6 +157,8 @@ class Team7Ghost extends JPanel {
     public int getXloc() { return xg; }
     public int getYloc() { return yg; }
 }
+
+
 
     class ghostAnimationLoop implements Runnable {
         private final Team7Ghost gal;
