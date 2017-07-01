@@ -1,7 +1,7 @@
 /**
  *
- * @author 
- * filename: 
+ * @author pdreiter
+ * filename: CompanionPanel.java
  * creation date: 06/30/2017
  * description: 
  * Team members:
@@ -12,11 +12,24 @@
  */
 
 package CSE360;
-public class CompanionPanel extends JPanel implements Runnable {
+
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+public class CompanionPanel extends JPanel implements Runnable{
 
 	private JButton hintButton;
 
 	private Companion companion;
+
+	
+	
+	public CompanionPanel(String fPath) {
+		hintButton=null;
+		companion = new Companion(fPath);
+	}
 
 	public void drawCompanion() {
 
@@ -29,5 +42,13 @@ public class CompanionPanel extends JPanel implements Runnable {
 	public void drawHintButton() {
 
 	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

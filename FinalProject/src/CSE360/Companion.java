@@ -1,7 +1,7 @@
 /**
  *
- * @author 
- * filename: 
+ * @author pdreiter
+ * filename: Companion.java
  * creation date: 06/30/2017
  * description: 
  * Team members:
@@ -10,8 +10,9 @@
  *  Notes from author: astah profession created the initial barebones class
  *
  */
-
 package CSE360;
+
+	
 public class Companion implements Runnable {
 
 	private String message;
@@ -20,8 +21,16 @@ public class Companion implements Runnable {
 
 	private int idleCounter;
 
-	private char companionState;
-
+	private CompanionBrain brain;
+    
+	public Companion(String fPath) {
+		message=null;
+		imageIcon=null;
+		idleCounter=0;
+		brain = new CompanionBrain(fPath);
+	}
+	
+	@Override
 	public void run() {
 
 	}
