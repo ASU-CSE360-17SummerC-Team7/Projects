@@ -30,11 +30,11 @@ public class Project7 extends JFrame {
 		companionPanel = new CompanionPanel(fPath);
 		
 	}
-	public void main() {
+	public static void main(String[] args){
 		String fPath = null; int fIter;
         // pdreiter - some error handling for images - make sure that Team7Images path is correct, despite project include paths
 		for(fIter=0;fIter<Project7Global.filePath.length;fIter++) { 
-			if((new File(Project7Global.filePath[fIter])).isDirectory()) { fPath=Project7Global.filePath[fIter]; }
+			if((new File(Project7Global.filePath[fIter])).isDirectory()) { fPath=Project7Global.filePath[fIter]; break;}
 			else if(Project7Global.DEBUG) { System.out.println("Cannot find directory : "+Project7Global.filePath[fIter]); }
 		}
 		if(fPath==null) { System.out.println("Unable to continue: Could not resolve filepaths"); }

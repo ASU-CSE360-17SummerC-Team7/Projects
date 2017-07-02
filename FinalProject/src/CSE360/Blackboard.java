@@ -45,11 +45,25 @@ public class Blackboard extends Observable implements Observer {
 
 	private ExamPanel examPanel;
 
+	public Blackboard() { 
+		SetStartTime();
+		ClearSubmitEvent();
+		ClearSaveEvent();
+		ClearChooseEvent();
+		answerTime = null;
+		correctlyAnsweredQuestion=null;
+	}
+	
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void initializeArrays(int totalNumQuestions) { 
+		answerTime = new Time[totalNumQuestions];
+		correctlyAnsweredQuestion = new boolean[totalNumQuestions];
 	}
 	public Time getAnswerTime(int answerNum) { return answerTime[answerNum];}
 	public void setAnswerTime(int answerNum, Time t) { answerTime[answerNum]=t;}
@@ -86,10 +100,5 @@ public class Blackboard extends Observable implements Observer {
 
 	Question GetCurrentQuestion() { return currentQuestion;}
 	void SetCurrentQuestion(Question q) { currentQuestion=q;}
-
-    public void update() {
-
-	}
-	
 
 }
