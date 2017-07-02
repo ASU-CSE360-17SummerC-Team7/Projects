@@ -58,12 +58,18 @@ public class CompanionPanel extends JPanel implements Runnable {
 
 	public void drawCompanion() {
 		Project7Global.DEBUG_MSG(0, "CompanionPanel drawCompanion(): start");
-		staticCompanion.setVisible(true);
-		staticCompanion.repaint();
-		if(isMoving) { movingCompanion.makeVisible();}
-		else { movingCompanion.makeInvisible(); }
+		if(isMoving) { 
+			movingCompanion.makeVisible();
+		    staticCompanion.setVisible(false);
+		    staticCompanion.repaint();
+		}
+		else { 
+			movingCompanion.makeInvisible();
+			staticCompanion.setVisible(true);
+			staticCompanion.repaint();
+		}
 		movingCompanion.setVisible(isMoving);
-		jp.setVisible(true);jp.repaint();
+		//jp.setVisible(true);jp.repaint();
 		repaint();
 		Project7Global.DEBUG_MSG(0, "CompanionPanel drawCompanion(): end");
 	}
@@ -79,8 +85,8 @@ public class CompanionPanel extends JPanel implements Runnable {
 				drawCompanion();
 			} 			
 			try {
-				moveMe.sleep(1000);
-				jp.revalidate();jp.repaint();
+				moveMe.sleep(100);
+				//jp.revalidate();jp.repaint();
 				Project7Global.DEBUG_MSG(0, "CompanionPanel: run() : sleep");
 			} catch (InterruptedException e) {
 				Project7Global.ERROR_MSG("CompanionPanel: Interrupt Exception");
