@@ -12,12 +12,30 @@
  */
 
 package CSE360;
+
+import javax.swing.JPanel;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+
 public class ExamPanel extends JPanel implements Observable {
 
 	private Exam exam;
 
 	public void drawExam() {
 
+	}
+
+	@Override
+	public void addListener(InvalidationListener arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeListener(InvalidationListener arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

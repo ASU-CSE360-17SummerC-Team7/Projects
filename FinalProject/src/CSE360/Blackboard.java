@@ -12,7 +12,12 @@
  */
 
 package CSE360;
-public class Blackboard implements Observable, Observer {
+
+import java.sql.Time;
+import java.util.Observable;
+import java.util.Observer;
+
+public class Blackboard extends Observable implements Observer {
 
 	private Time[] answerTime;
 
@@ -40,6 +45,12 @@ public class Blackboard implements Observable, Observer {
 
 	public void update() {
 
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

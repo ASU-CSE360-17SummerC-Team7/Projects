@@ -213,7 +213,7 @@ public class CompanionBrain implements Observer {
 	// these are original functions
 	
 	public void updateMood() {
-
+		currentMood = CompanionMood.intToCompanionMood(CompanionMood.ToInt(currentMood)+1);
 	}
 
 	public void showFace(boolean madORhappy) {

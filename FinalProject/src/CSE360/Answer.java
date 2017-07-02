@@ -12,6 +12,9 @@
  */
 
 package CSE360;
+
+import javax.swing.JLabel;
+
 public class Answer extends JLabel {
 
 	private String answer;
