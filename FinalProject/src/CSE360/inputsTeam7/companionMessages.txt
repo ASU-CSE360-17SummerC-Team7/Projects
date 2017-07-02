@@ -12,7 +12,7 @@ OKAY, Keep at it!
 OKAY, You can do it!
 OKAY, Only <#QUESTIONS> questions left!
 INDIFFERENT, Meh.
-INDIFFERENT, What time is it? oh... yeah, it's <#TIME>
+INDIFFERENT, What time is it? oh... yeah. it's <#CURRENTTIME>
 INDIFFERENT, How long are you going to take? I've got somewhere to be in an hour.
 UNHAPPY, ugh. really?
 UNHAPPY, come on.  you can do better than this!
