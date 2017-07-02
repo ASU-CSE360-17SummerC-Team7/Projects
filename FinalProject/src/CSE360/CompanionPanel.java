@@ -13,77 +13,79 @@
 
 package CSE360;
 
+import java.awt.Dimension;
 import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class CompanionPanel extends JPanel implements Runnable{
+public class CompanionPanel extends JPanel implements Runnable {
 
-	private JButton hintButton;
-
-	private String message;
-
-	private String[] imageIcon;
-
-	private CompanionBrain brain;
-	
 	private JLayeredPane jp;
-	private Team7Ghost ghost;
+	private Team7Ghost movingCompanion;
+	private Companion  staticCompanion;
 	
 	private boolean isMoving;
-	private boolean brainEvent;
+	Thread moveMe;
 	
 	private final int JPANEL_WIDTH=600;
-	private final int JPANEL_HEIGHT=200;
-    
-	Thread b;
-
-	
+	private final int JPANEL_HEIGHT=200;	
 	
 	public CompanionPanel(String fPath, String s) {
-		hintButton=null;
-		isMoving=false;brainEvent=false;
-		brain = new CompanionBrain(fPath,s);
-		message=brain.getMessage();
-		imageIcon=brain.getImage();
-		b = new Thread(this);
-		ghost=new Team7Ghost(JPANEL_WIDTH,JPANEL_HEIGHT,fPath);
+		Project7Global.DEBUG_MSG(0, "CompanionPanel(): start");
+		//		hintButton=null;
+		movingCompanion=new Team7Ghost(JPANEL_WIDTH,JPANEL_HEIGHT,fPath+"/images", false); // make ghost invisible by default
+		isMoving=movingCompanion.getVisibility();
+		staticCompanion = new Companion(new CompanionBrain(fPath,s),fPath, JPANEL_WIDTH,JPANEL_HEIGHT);
+        moveMe = new Thread(this);
+		jp=new JLayeredPane();
+		jp.setPreferredSize(new Dimension(JPANEL_WIDTH,JPANEL_HEIGHT));
+		jp.setSize(JPANEL_WIDTH, JPANEL_HEIGHT);
+		jp.add(movingCompanion, 1);
+		jp.add(staticCompanion, 0);
+		this.add(jp);
+		staticCompanion.setVisible(true); staticCompanion.repaint();
+		jp.setVisible(true);
+		setVisible(true);
+		jp.revalidate();jp.repaint();
+		Project7Global.DEBUG_MSG(0, "CompanionPanel(): Added Moving Companion and Static Companion to LayeredPane");
+		drawCompanion();
+		moveMe.start();
+		Project7Global.DEBUG_MSG(0, "CompanionPanel(): end");
 	}
 
 	public void drawCompanion() {
-
+		Project7Global.DEBUG_MSG(0, "CompanionPanel drawCompanion(): start");
+		staticCompanion.setVisible(true);
+		staticCompanion.repaint();
+		if(isMoving) { movingCompanion.makeVisible();}
+		else { movingCompanion.makeInvisible(); }
+		movingCompanion.setVisible(isMoving);
+		jp.setVisible(true);jp.repaint();
+		repaint();
+		Project7Global.DEBUG_MSG(0, "CompanionPanel drawCompanion(): end");
 	}
 
-	public void drawMessage() {
-
-	}
-
-	public void drawHintButton() {
-
-	}
-
+	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		if(brainEvent) {
-			
-			brainEvent=false;
-		} else {
-			brain.updateIdleCounter();
-			if(brain.getIsMoving()) {}
+		while(true) {
+			Project7Global.DEBUG_MSG(0, "CompanionPanel: run");
+			if(staticCompanion.isMoving()!=isMoving) {
+				Project7Global.DEBUG_MSG(1, "CompanionPanel: run.isMoving changed state");
+				isMoving=staticCompanion.isMoving();
+				drawCompanion();
+			} 			
+			try {
+				moveMe.sleep(1000);
+				jp.revalidate();jp.repaint();
+				Project7Global.DEBUG_MSG(0, "CompanionPanel: run() : sleep");
+			} catch (InterruptedException e) {
+				Project7Global.ERROR_MSG("CompanionPanel: Interrupt Exception");
+				return;
+			}
 		}
-	
-		
-	}
-
-	public void updateForMood() {
-		brain.updateForMood(); 
-		message = brain.getMessage();
-		imageIcon = brain.getImage();
-		
 	}
 	
-
 }

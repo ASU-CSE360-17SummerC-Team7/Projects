@@ -58,9 +58,9 @@ public class CompanionBrain extends Observable implements Observer {
 	  "Venice", "Dublin", "SFO", "Berlin", "London",
 	  "Mexico", "Delhi" };
 
-	private static final int M_IDLE_COUNT = 0;
+	private static final int M_IDLE_COUNT =10;
 
-	private static final int N_IDLE_COUNT = 5;
+	private static final int N_IDLE_COUNT = 25;
 
 	private static final int L_TIMES_Q_ANSWERED = 2;
 	   
@@ -107,11 +107,14 @@ public class CompanionBrain extends Observable implements Observer {
 		}
 		this.setChanged();
 	}
+	public CompanionMood getMood() {return currentMood;}
 	public boolean getIsMoving() {return isMoving;}
-	public  void updateIdleCounter() { idleCounter++; }
+	public  void updateIdleCounter() { idleCounter++; this.handleIdleEvent(idleCounter);}
 	private void resetIdleCounter() { idleCounter=0; }
+	public int getIdleCounter() { return idleCounter; }
 	
  	private String getRandomStateResponse(CompanionState x) {
+ 		Project7Global.DEBUG_MSG(0, "CompanionBrain::getRandomState("+CompanionState.CompanionStateToString(x)+")");
  		Random r = new Random();
  		// generate a random number between 0 and the # of stateMessages for that particular state
  		int rand = r.nextInt(stateMessages.get(x).size()); 
@@ -345,12 +348,16 @@ public class CompanionBrain extends Observable implements Observer {
 		return currentMsg;
 	}
 
-	public void handleIdleEvent(int idleCnt) {
-		if(idleCnt<=M_IDLE_COUNT) {
+	private void handleIdleEvent(int idleCnt) {
+		Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+")");
+		if(idleCnt<M_IDLE_COUNT) { }
+		else if((idleCnt>=M_IDLE_COUNT) && (idleCnt<N_IDLE_COUNT)) {
+			Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+") => IdleEntry, IsMoving==false");
 			updateAfterIdleEntry();
 			isMoving=false;
 		}
-		else if(idleCnt<=N_IDLE_COUNT) {
+		else if(idleCnt>=N_IDLE_COUNT) {
+			Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+") => IsMoving==true");
 			isMoving=true;
 		}
 	}

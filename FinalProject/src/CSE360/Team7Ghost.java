@@ -7,6 +7,7 @@ package CSE360;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,22 +50,41 @@ class Team7Ghost extends JPanel implements Runnable
     private boolean currentlyVisible;
     Thread gt;
     
-    public Team7Ghost(int xbound,int ybound,String imp) 
-    {   setOpaque(false);
+    public Team7Ghost(int xbound,int ybound,String imp, boolean defaultVisibility) 
+    {   
+    	Project7Global.DEBUG_MSG(0, "Team7Ghost::Team7Ghost("+Integer.toString(xbound)+","+Integer.toString(ybound)+","+imp+")  [start]");
         setLayout(new BorderLayout());
-        currentlyVisible=false;
+        currentlyVisible=defaultVisibility;
         iconPath=imp+"/ghost_";
         xg=0;yg=0;
         this.xbound = xbound;
         this.ybound = ybound;
         dir="right";
+        Project7Global.DEBUG_MSG(0, "Team7Ghost::Team7Ghost() - "+getFullIconPath());
         animation = new JLabel (new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(ghostScale, ghostScale,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"));
         animation.setLocation(xg,yg);
         this.add(animation);
         this.setBounds(0,0,ghostScale,ghostScale);
         this.setSize(xbound,ybound);
-        setVisible(false);
+        animation.setVisible(true);
+        setVisible(defaultVisibility);
+        Project7Global.DEBUG_MSG(0, "Team7Ghost::Team7Ghost("+Integer.toString(xbound)+","+Integer.toString(ybound)+","+imp+")  [end]");
+    }
+    public boolean getVisibility() { return currentlyVisible; }
+    public void makeVisible() {
+		Project7Global.DEBUG_MSG(0, "Team7Ghost::makeVisible() [start]");
+    	updateGhostMovement(true);
+    	animation.setVisible(currentlyVisible); animation.revalidate(); animation.repaint();
+        this.setVisible(currentlyVisible);this.revalidate();this.repaint();
+        Project7Global.DEBUG_MSG(0, "Team7Ghost::makeVisible() [end]");
+    }
+    public void makeInvisible() {
+		Project7Global.DEBUG_MSG(0, "Team7Ghost::makeInvisible() [start]");
+    	updateGhostMovement(false);
+    	animation.setVisible(currentlyVisible); animation.revalidate(); animation.repaint();
+        this.setVisible(currentlyVisible);this.revalidate();this.repaint();
+        Project7Global.DEBUG_MSG(0, "Team7Ghost::makeInvisible() [end]");
     }
 
     // method: updateBounds
@@ -151,6 +171,7 @@ class Team7Ghost extends JPanel implements Runnable
     // method: updateGhostAnimation
     // simple helper method that helps to rescale and redraw image with new location
     public void updateGhostAnimation() throws IOException{
+    	Project7Global.DEBUG_MSG(1,"Team7Ghost::updateGhostAnimation() => "+getFullIconPath());
        // animation.setIcon(new ImageIcon(ImageIO.read(new File(getFullIconPath()))));
        animation.setIcon(new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(ghostScale, ghostScale,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"));
@@ -161,6 +182,7 @@ class Team7Ghost extends JPanel implements Runnable
     // method: updateGhostCoordinates
     // simple helper method that sets class variables and updates location
     public void updateGhostCoordinates(int x,int y) {
+    	Project7Global.DEBUG_MSG(0,"Team7Ghost::updateGhostCoordinates("+Integer.toString(x)+","+Integer.toString(y)+")");
         xg=x;yg=y;
         setLocation(xg,yg);
         //System.out.println("Ghost location: ("+Integer.toString(xg)+","+Integer.toString(yg)+");\n");
@@ -179,8 +201,10 @@ class Team7Ghost extends JPanel implements Runnable
     // handling ghost status within class - this just handles all movements for the ghost state 
     // starts or stops the ghost movement (thread) based on the current visibility of the ghost
     public boolean toggleGhostMovement(){
+    	Project7Global.DEBUG_MSG(1,"Team7Ghost: toggleGhostMovement() : [start] currentlyVisible is "+Boolean.toString(currentlyVisible)+")");
         if(currentlyVisible==true){ stopGhostMovement();}
         else { startGhostMovement(); }
+    	Project7Global.DEBUG_MSG(1,"Team7Ghost: toggleGhostMovement() : [start] currentlyVisible is "+Boolean.toString(currentlyVisible)+")");
         return currentlyVisible;
     }
     //----------------------------------------------------------------------------------
@@ -190,6 +214,7 @@ class Team7Ghost extends JPanel implements Runnable
     // if the ghost is already moving and makeVisible==false, toggle Ghost movement
     // if the ghost is not moving and makeVisible==true, toggle Ghost movement
     public boolean updateGhostMovement(boolean makeVisible){    
+    	Project7Global.DEBUG_MSG(1,"Team7Ghost: updateGhostMovement("+Boolean.toString(makeVisible)+")");
         if(currentlyVisible!=makeVisible){ toggleGhostMovement(); } 
         // if the state is the same, don't do anything
         return currentlyVisible;
@@ -198,7 +223,9 @@ class Team7Ghost extends JPanel implements Runnable
     // private helper function: startGhostMovement
     // manages starting the ghost thread to ensure that the thread operates correctly
     private void startGhostMovement() {
+    	Project7Global.DEBUG_MSG(1,"Team7Ghost: startGhostMovement()");
     	if(gt == null) { 
+        	Project7Global.DEBUG_MSG(1,"Team7Ghost: startGhostMovement() => gt == null");
 	        animation.setLocation(xg,yg); 
 	        
 	        setVisible(true);
@@ -210,7 +237,9 @@ class Team7Ghost extends JPanel implements Runnable
     // private helper function: stopGhostMovement
     // manages stopping the ghost thread to ensure that the thread operates correctly
     private void stopGhostMovement() {
+    	Project7Global.DEBUG_MSG(0,"Team7Ghost: stopGhostMovement()");    	
     	if(gt != null) { 
+        	Project7Global.DEBUG_MSG(0,"Team7Ghost: stopGhostMovement() => gt != null");    		
 	        setVisible(false);
 	        gt.interrupt();
 	        while(gt.isInterrupted()==true){} // wait until thread has completely been interrupted
@@ -222,12 +251,16 @@ class Team7Ghost extends JPanel implements Runnable
 
     @Override
     public void run(){
-        int i=0;
+    	Project7Global.DEBUG_MSG(0,"Team7Ghost: run()");
+    	int i=0;
         int moveCtr=0;
-
         while (true) { 
             try { 
-                if(gt.interrupted()) { return; }
+            	Project7Global.DEBUG_MSG(0,"Team7Ghost: run() : while iteration ["+Integer.toString(i)+"]");
+                if(gt.interrupted()) { 
+                	Project7Global.DEBUG_MSG(0,"Team7Ghost: run() : gt.interrupted()==true");
+                	return; 
+                }
                 if(moveCtr<=0) { 
                     moveCtr = 100; //(int) (Math.random()%40); 
                     setDirection((int) (Math.floor(Math.random()*101))%4);
@@ -252,9 +285,6 @@ class Team7Ghost extends JPanel implements Runnable
             }
         }
     }
-
-
-
 }
 
 

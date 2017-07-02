@@ -13,22 +13,32 @@
 
 package CSE360;
 
+import java.awt.GridLayout;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 public class Project7 extends JFrame {
-
-	private JLayeredPane jLayeredPane;
-
+	
 	private CompanionPanel companionPanel;
-
 	private ExamPanel examPanel;
 
 	public Project7(String fPath) {
+		setLayout(new GridLayout(1,2));
+		setTitle("Final Project - Team7 (Chen Yang and Pemma Reiter)");
+		setSize(900,900);
 		companionPanel = new CompanionPanel(fPath,"Pemma Reiter");
+		add(companionPanel);
+		companionPanel.setVisible(true);
+		companionPanel.drawCompanion();
 		
+		setVisible(true);
+		revalidate();
+		repaint();
 	}
 	public static void main(String[] args){
 		String fPath = null; int fIter;
