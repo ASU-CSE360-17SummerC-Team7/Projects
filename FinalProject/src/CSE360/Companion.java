@@ -47,6 +47,7 @@ public class Companion extends JPanel implements Runnable {
 		Project7Global.DEBUG_MSG(0, "Companion() : width ["+Integer.toString(w)+"], height ["+Integer.toString(h)+"]");
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(w,h));
+		this.setSize(w,h);
 		imageIndex=0;
 		brain=b;
 		Project7Global.DEBUG_MSG(0, "Companion() : brain.message = "+brain.getMessage());
@@ -78,6 +79,7 @@ public class Companion extends JPanel implements Runnable {
 		icon.setPreferredSize(new Dimension(w,h));icon.setVisible(true);icon.setOpaque(true);
 		time.setPreferredSize(new Dimension(w,h));time.setVisible(true);time.setOpaque(true);
 		setVisible(true);
+		revalidate();
 		repaint(); 
 		startCompanionThread();
 		Project7Global.DEBUG_MSG(0, "Companion() : end");

@@ -45,10 +45,11 @@ public class CompanionPanel extends JPanel implements Runnable {
 		jp.add(movingCompanion, 1);
 		jp.add(staticCompanion, 0);
 		this.add(jp);
-		staticCompanion.setVisible(true); staticCompanion.repaint();
+//		add(staticCompanion);
 		jp.setVisible(true);
 		setVisible(true);
 		jp.revalidate();jp.repaint();
+		//staticCompanion.setVisible(true); staticCompanion.repaint();
 		Project7Global.DEBUG_MSG(0, "CompanionPanel(): Added Moving Companion and Static Companion to LayeredPane");
 		drawCompanion();
 		moveMe.start();
