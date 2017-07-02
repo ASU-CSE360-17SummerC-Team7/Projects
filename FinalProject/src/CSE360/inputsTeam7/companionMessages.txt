@@ -20,10 +20,11 @@ UNHAPPY, I would suggest that you stop bingewatching Netflix and pick up a book.
 GRUMPY, I am losing my mind right now.
 GRUMPY, I could be watching the next episode of 'Orange is the new Black' right now...
 GRUMPY, *grumble*
+WELCOME, Hello <#STUDENT>!  Thanks for taking our test and GOOD LUCK!!!
 BORED, Let's see. The current weather in <#WLOC> is <#WTEMP> and <#WSUMMARY>
 BORED, Come on. You've spent <#ELAPSEDTIME> seconds on this question!! Move on!
 BORED, You are taking an average of <#AVERAGE_ELAPSEDTIME> seconds to answer each question.
-SLEEPING, ZZZzzzzzzz....  ZZZZZZzzzzz.....
+BORED, ZZZzzzzzzz....  ZZZZZZzzzzz.....
 WORKING, OHHH, good choice!!!
 WORKING, You sure you want that?
 WORKING, I don't know... that answer seems a bit fishy. But what do I know? I'm an image

@@ -27,7 +27,7 @@ public class Project7 extends JFrame {
 	private ExamPanel examPanel;
 
 	public Project7(String fPath) {
-		companionPanel = new CompanionPanel(fPath);
+		companionPanel = new CompanionPanel(fPath,"Pemma Reiter");
 		
 	}
 	public static void main(String[] args){

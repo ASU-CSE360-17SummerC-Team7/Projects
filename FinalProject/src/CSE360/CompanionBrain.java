@@ -17,57 +17,103 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.Observable;
-import java.util.Observer;
 
 
 
 
-public class CompanionBrain implements Observer {
+public class CompanionBrain extends Observable implements Observer {
 
-	private boolean needsHint;
-
-	private int[] selectionCounter;
-
-	private String currentMsg;
-
-	private String[] currentImg;
-
+	private boolean  needsHint;
+	private String   currentMsg;
+	private List<String> currentImg;
 	private CompanionMood currentMood;
-	
 	private CompanionState currentState;
-
-	private Blackboard blackboard;
+	private Time     currentTime;
+	// removing to keep everything in the update function
+	// private Blackboard blackboard;
 	// these class variables have been added since inception of class diagram
-	
+
+	private int idleCounter;
+
+	private boolean isMoving;	
 	private HashMap<CompanionMood,List<String>> moodMessages;
 	private HashMap<CompanionMood,List<String>> moodImages;
 	private HashMap<CompanionState,List<String>> stateMessages;	
-	private int totalQuestions;
-	private int answeredQuestions;
+
 	private double latitude;
 	private double longitude;
+	private String cityName;
 	private String wsummary;
 	private String wtemp;
-	private Time currentTime;
-	private Time startTime;
+	private String studentName;
 	
-	public CompanionBrain(String fPath) {
+	private double finalScore;
+
+	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class
+	private Hashtable<String, String> cityData = new Hashtable<String, String>();
+	   
+	public final static String[] CITIES = { "Tempe", "NY", "Bangalore",
+	  "Venice", "Dublin", "SFO", "Berlin", "London",
+	  "Mexico", "Delhi" };
+
+	private static final int M_IDLE_COUNT = 0;
+
+	private static final int N_IDLE_COUNT = 5;
+
+	private static final int L_TIMES_Q_ANSWERED = 2;
+	   
+	private void initializeCityData() {
+	  cityData.put(CITIES[0], "33.424564,-111.928001");    
+	  cityData.put(CITIES[1], "40.730610,-73.935242");
+	  cityData.put(CITIES[2], "12.972442,77.580643");
+	  cityData.put(CITIES[3], "45.444958,12.328463");
+	  cityData.put(CITIES[4], "53.350140,-6.266155" );
+	  cityData.put(CITIES[5], "37.733795,-122.446747");
+	  cityData.put(CITIES[6], "52.518623,13.376198" );
+	  cityData.put(CITIES[7], "51.501476,-0.140634");
+	  cityData.put(CITIES[8], "19.451054,-99.125519"); 
+	  cityData.put(CITIES[9], "28.644800,77.216721");
+	}
+	// end of reuse
+	
+	
+	// method: getRandomCity()
+	// description: picks a random city from the list of CITIES
+    private final String getRandomCity() {  
+     		Random r = new Random();
+     		// generate a random number between 0 and the # of moodMessages for that particular state
+     		int rand = r.nextInt(CITIES.length); 
+     		return CITIES[rand];
+    }
+    
+	public CompanionBrain(String fPath, String sName) {
 		moodMessages=new HashMap<CompanionMood,List<String>>();
 		moodImages=new HashMap<CompanionMood,List<String>>();
-		stateMessages=new HashMap<CompanionState,List<String>>();	
+		stateMessages=new HashMap<CompanionState,List<String>>();
+		studentName=sName;
+		initializeCityData();
 		initializePhrases(fPath);
 		initializeImages(fPath);
+    	isMoving=false;idleCounter=0;
+    	currentMood=CompanionMood.INDIFFERENT;
+    	currentImg=moodImages.get(currentMood);
+    	currentState=CompanionState.WELCOME;
+    	currentMsg=getRandomStateResponse(currentState);
 		if(Project7Global.DEBUG&&Project7Global.DEBUG_LEVEL==0) {
 			printAllMessages();
 			printAllImages();
 		}
+		this.setChanged();
 	}
-
+	public boolean getIsMoving() {return isMoving;}
+	public  void updateIdleCounter() { idleCounter++; }
+	private void resetIdleCounter() { idleCounter=0; }
+	
  	private String getRandomStateResponse(CompanionState x) {
  		Random r = new Random();
- 		// generate a random number between 0 and the # of moodMessages for that particular state
+ 		// generate a random number between 0 and the # of stateMessages for that particular state
  		int rand = r.nextInt(stateMessages.get(x).size()); 
  		return parseMessage(stateMessages.get(x).get(rand));
 	}
@@ -78,7 +124,11 @@ public class CompanionBrain implements Observer {
  		int rand = r.nextInt(moodMessages.get(x).size()); 
  		return parseMessage(moodMessages.get(x).get(rand));
 	}
-	  
+ 	
+	public void updateForMood() {
+	    currentMsg=getRandomMoodResponse(currentMood);
+	    currentImg=moodImages.get(currentMood);
+	}
     
 	public void initializePhrases(String fPath) {
 		// read in line
@@ -95,7 +145,7 @@ public class CompanionBrain implements Observer {
                 readState=parsed[0];
                 readMessage=parsed[1];
                 Project7Global.DEBUG_MSG(0,"parsed line: ["+parsed[0]+"] ["+parsed[1]+"]");
-                addEntry(readState,readMessage);
+                addPhraseEntry(readState,readMessage);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,8 +183,9 @@ public class CompanionBrain implements Observer {
         }
 
     }
+	
 	void addImageEntry(String readState, List<String> readMessage) { 
-		if(readState.matches("(BORED|SLEEPING|WORKING|DONE)")) {
+		if(readState.matches("(WELCOME|BORED|SLEEPING|WORKING|DONE)")) {
 			Project7Global.DEBUG_MSG(0,"Currently no support of state images");
 		}		
 		else if (readState.matches("(ECSTATIC|HAPPY|OKAY|INDIFFERENT|UNHAPPY|GRUMPY)")) {
@@ -152,8 +203,8 @@ public class CompanionBrain implements Observer {
 		}
 	}
 
-	void addEntry(String readState, String readMessage) { 
-		if(readState.matches("(BORED|SLEEPING|WORKING|DONE)")) {
+	void addPhraseEntry(String readState, String readMessage) { 
+		if(readState.matches("(WELCOME|BORED|SLEEPING|WORKING|DONE)")) {
 			Project7Global.DEBUG_MSG(0,"Processing Line as CompanionState: "+readState+" : "+readMessage);
 			List<String> y = stateMessages.get(CompanionState.StringToCompanionState(readState));
 			if(y == null) {
@@ -229,6 +280,10 @@ public class CompanionBrain implements Observer {
 		    	case "#TOTAL_ELAPSEDTIME": 
 		    		processed += " "+getTotalElapsedTime()+" ";
 		    		break;
+		    	case "#STUDENT": 
+		    		processed += " "+studentName+" ";
+		    		break;
+
 		    	}
 	    	}
 	    	else {
@@ -281,38 +336,63 @@ public class CompanionBrain implements Observer {
 	}
 
 	public String[] getImage() {
-		return null;
+		String[] img = new String[currentImg.size()];
+		for(int i=0;i<currentImg.size();i++) { img[i]=currentImg.get(i);}
+		return img;
 	}
 
 	public String getMessage() {
-		return null;
-	}
-
-	public void handleSubmissionEvent() {
-
-	}
-
-	public void handleAnswerEvent() {
-
+		return currentMsg;
 	}
 
 	public void handleIdleEvent(int idleCnt) {
-
+		if(idleCnt<=M_IDLE_COUNT) {
+			updateAfterIdleEntry();
+			isMoving=false;
+		}
+		else if(idleCnt<=N_IDLE_COUNT) {
+			isMoving=true;
+		}
 	}
-
-	private void calculateScore() {
-
-	}
-// TO DO: Remove this from Class Diagram
-// 	private String getRandomIdleResponse() {
-//		return null;
-//	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+        Blackboard blackboard=(Blackboard)arg0;
+        resetIdleCounter();
+		int numCorrect=blackboard.getNumberOfCorrectAnswers();
+		int numAnswered=blackboard.getNumAnsweredQuestions();
+		int totalNum=blackboard.GetTotalNumQuestions();
+        if(blackboard.GetSubmitEvent()) {
 		// TODO Auto-generated method stub
-		
-		
+    		currentState=CompanionState.DONE;
+    		currentMsg=getRandomStateResponse(currentState);
+    		finalScore = blackboard.calculateScore();
+        }
+		if(blackboard.GetChooseEvent()) { // Answer event
+			if(blackboard.getSelectionCounter(blackboard.GetCurrentQuestionNumber()) >= L_TIMES_Q_ANSWERED) { needsHint=true;}
+			if(numCorrect==numAnswered) {
+				currentMood=CompanionMood.ECSTATIC;
+			}
+			else if( (numAnswered-numCorrect) < ((1*totalNum)/5) ) {
+				currentMood=CompanionMood.HAPPY;
+			}
+			else if( (numAnswered-numCorrect) < ((2*totalNum)/5) ) {
+				currentMood=CompanionMood.OKAY;
+			}
+			else if( (numAnswered-numCorrect) < ((3*totalNum)/5) ) {
+				currentMood=CompanionMood.INDIFFERENT;
+			}
+			else if( (numAnswered-numCorrect) < ((4*totalNum)/5) ) {
+				currentMood=CompanionMood.UNHAPPY;
+			}
+			else {
+				currentMood=CompanionMood.GRUMPY;
+			}
+			currentImg=moodImages.get(currentMood);
+			currentState=CompanionState.WORKING;
+			currentMsg=getRandomStateResponse(currentState);
+		}
+		this.setChanged();
 	}
 	
 	private void printAllMessages() {
@@ -359,6 +439,20 @@ public class CompanionBrain implements Observer {
 			}
 		}
 		System.out.println("---------------END OF IMAGES-------------");
+	}
+	
+	public void updateAfterIdleEntry() {
+		currentState=CompanionState.BORED;
+		currentMsg=getRandomStateResponse(currentState);
+		// need to update variables and information for use in the idle state
+		cityName=getRandomCity();
+		String[] geoLoc = cityData.get(cityName).split(",");
+		latitude= Double.parseDouble(geoLoc[0]);
+		longitude= Double.parseDouble(geoLoc[1]);
+		Team7WeatherInfo weather= new Team7WeatherInfo(latitude,longitude);
+		wsummary=weather.getWeatherFieldString("currently", "summary");
+		wtemp=weather.getWeatherFieldString("currently", "temperature");
+		currentTime = Time.valueOf(LocalDateTime.now().toLocalTime());
 	}
 	
 

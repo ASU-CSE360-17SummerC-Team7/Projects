@@ -16,19 +16,40 @@ package CSE360;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 public class CompanionPanel extends JPanel implements Runnable{
 
 	private JButton hintButton;
 
-	private Companion companion;
+	private String message;
+
+	private String[] imageIcon;
+
+	private CompanionBrain brain;
+	
+	private JLayeredPane jp;
+	private Team7Ghost ghost;
+	
+	private boolean isMoving;
+	private boolean brainEvent;
+	
+	private final int JPANEL_WIDTH=600;
+	private final int JPANEL_HEIGHT=200;
+    
+	Thread b;
 
 	
 	
-	public CompanionPanel(String fPath) {
+	public CompanionPanel(String fPath, String s) {
 		hintButton=null;
-		companion = new Companion(fPath);
+		isMoving=false;brainEvent=false;
+		brain = new CompanionBrain(fPath,s);
+		message=brain.getMessage();
+		imageIcon=brain.getImage();
+		b = new Thread(this);
+		ghost=new Team7Ghost(JPANEL_WIDTH,JPANEL_HEIGHT,fPath);
 	}
 
 	public void drawCompanion() {
@@ -46,9 +67,23 @@ public class CompanionPanel extends JPanel implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		if(brainEvent) {
+			
+			brainEvent=false;
+		} else {
+			brain.updateIdleCounter();
+			if(brain.getIsMoving()) {}
+		}
+	
 		
 	}
 
+	public void updateForMood() {
+		brain.updateForMood(); 
+		message = brain.getMessage();
+		imageIcon = brain.getImage();
+		
+	}
 	
 
 }

@@ -13,4 +13,5 @@ public final class Project7Global {
 		if(DEBUG && criticality>=DEBUG_LEVEL) { System.out.println(msg); }
 	}
 
+
 }

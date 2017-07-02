@@ -22,28 +22,23 @@ import java.util.Observer;
 public class Blackboard extends Observable implements Observer {
 
 	private Time[] answerTime;
-
 	private boolean[] correctlyAnsweredQuestion;
-
 	private int qNum; // this is the current Question Number
-
 	private int totalNumQuestions;
-
 	private int questionsLeft;
-
 	private Time startTime;
-
 	private boolean submitEvent;
-
 	private boolean saveEvent;
-
 	private boolean chooseEvent;
-
 	private String nameOfTestee;
-
 	private Question currentQuestion;
-
 	private ExamPanel examPanel;
+	private Time currentTime;
+	private int[] selectionCounter;
+	private int totalQuestions;
+	private int numAnsweredQuestions;
+	
+	
 
 	public Blackboard() { 
 		SetStartTime();
@@ -52,6 +47,10 @@ public class Blackboard extends Observable implements Observer {
 		ClearChooseEvent();
 		answerTime = null;
 		correctlyAnsweredQuestion=null;
+    	totalQuestions=10;
+		selectionCounter = new int[totalQuestions];
+		for(int i=0;i<totalQuestions;i++) { selectionCounter[i]=0;}
+		numAnsweredQuestions=0;
 	}
 	
 
@@ -60,6 +59,27 @@ public class Blackboard extends Observable implements Observer {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public double calculateScore() {
+		return (100*(double)getNumberOfCorrectAnswers())/(double)(totalQuestions);
+	}
+	
+	public int getNumberOfCorrectAnswers() {
+		int total=0;
+		for (int i=0;i<totalQuestions;i++) {
+			if(getCorrectlyAnsweredQuestion(i)) { total+=1; }
+		}
+		return total;
+	}
+	
+	private void updateSelectionCounter() { selectionCounter[GetCurrentQuestionNumber()]++; } 
+	public int getSelectionCounter(int q) { return selectionCounter[q]; } 
+	private void recalculateNumberOfAnsweredQuestions() {
+		numAnsweredQuestions=0;
+		for(int i=0;i<totalQuestions;i++) { if(selectionCounter[i]>0) {numAnsweredQuestions++;} }
+	}
+	public int getNumAnsweredQuestions() { return numAnsweredQuestions; }
+
 	
 	public void initializeArrays(int totalNumQuestions) { 
 		answerTime = new Time[totalNumQuestions];
@@ -71,8 +91,8 @@ public class Blackboard extends Observable implements Observer {
 	public boolean getCorrectlyAnsweredQuestion(int questionNum) { return correctlyAnsweredQuestion[questionNum];}
 	public void setCorrectlyAnsweredQuestion(int questionNum, boolean correctOrIncorrect) { correctlyAnsweredQuestion[questionNum]=correctOrIncorrect;}
 	
-	public int GetQuestionNumber() { return qNum;}
-	public void SetQuestionNumber(int i) { qNum=i;}
+	public int GetCurrentQuestionNumber() { return qNum;}
+	private void SetCurrentQuestionNumber(int i) { qNum=i;}
 	
 	public int GetTotalNumQuestions() { return totalNumQuestions;}
 	public void SetTotalNumQuestions(int i) { totalNumQuestions=i;}
