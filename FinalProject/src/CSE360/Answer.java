@@ -11,14 +11,15 @@
  *
  */
 
-package CSE360;
 
-import javax.swing.JLabel;
 
-public class Answer extends JLabel {
+public class Answer {
 
-	private String answer;
-
-	private String icon;
+	public int answer = 0;
+	public String choice;
+	/*public void setAnswer(int i)
+	{
+		answer = i;
+	}*/
 
 }
