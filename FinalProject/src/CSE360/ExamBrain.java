@@ -1,3 +1,4 @@
+package CSE360;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ExamBrain {
     System.out.print(string);
 	}
 	
-    public void readFile(ArrayList<String> arr) 
+   public void readFile(ArrayList<String> arr) 
 	{	
     	try
     	{
@@ -44,6 +45,7 @@ public class ExamBrain {
         }
         
 	}
+}
     
 
-}
+

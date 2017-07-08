@@ -1,3 +1,4 @@
+package CSE360;
 /**
  *
  * @author 
@@ -16,7 +17,7 @@
 public class Answer {
 
 	public int answer = 0;
-	public String choice;
+	public String choice = "";
 	/*public void setAnswer(int i)
 	{
 		answer = i;

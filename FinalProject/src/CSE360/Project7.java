@@ -49,11 +49,13 @@ public class Project7 extends JFrame {
 			Project7Global.DEBUG_MSG(0,"Student supplied name"+s);
 		}
 
-		setLayout(new GridLayout(1,2));
+		setLayout(new GridLayout(2,1));
 		setTitle("Final Project - Team7 (Chen Yang and Pemma Reiter)");
 		setSize(900,900);
-		
+		examPanel = new ExamPanel();
+
 		companionPanel = new CompanionPanel(fPath,s); // second parameter is student name
+		add(examPanel);
 		add(companionPanel);
 		companionPanel.setVisible(true);
 		companionPanel.drawCompanion();

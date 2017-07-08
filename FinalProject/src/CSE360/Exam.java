@@ -10,49 +10,54 @@
  *  Notes from author: astah profession created the initial barebones class
  *
  */
+package CSE360;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Observable;
 
+
 public class Exam extends Observable{
 
 	
 	private int[] correctAnswers;
-	private int[] studentAnswers;
 	private ArrayList<Question> questions;
 	//private ArrayList<Answer> choice = new ArrayList<Answer>();
 	private ExamBrain exambrain;
-	private int questionNum = 0;
+	private int questionNum;
 	private String string;
+	
 	public Exam()
 	{
 		exambrain = new ExamBrain();
-		correctAnswers = new int[(exambrain.arr).size()];
-		studentAnswers = new int[(exambrain.arr).size()];
+		questionNum = 0;
+		correctAnswers = new int [questionNum];
+		
 		questions = new ArrayList<Question>();
-		questionNum = (exambrain.arr).size();
-		string = null;
-	}
-	
-    public void populateExam() throws FileNotFoundException
-	{	
+		string = "";
+		//populateExam(exambrain, questions, string);
+		
+	//}
+
+   // public void populateExam(ExamBrain exambrain, ArrayList<Question> questions, String string)
+	//{	    	
     	for(int i= 0; i<(exambrain.arr).size(); i=i+5)
 			{
 				//all the info is in the arr arraylist, parse the info
-    			if(i%5==0)
+    			if(i%5==0&&(((exambrain.arr).size()-i)>=5))
     			{
+    				questionNum++;
     				Question q = new Question();
     				q.question = exambrain.arr.get(i);
-    				q.choices[0].answer =1;
-    				q.choices[0].choice = exambrain.arr.get(i+1); 
-    				q.choices[1].answer =2;
-    				q.choices[1].choice = exambrain.arr.get(i+2); 
-    				q.choices[2].answer =3;
-    				q.choices[2].choice = exambrain.arr.get(i+3); 
-    				q.choices[3].answer =4;
-    				q.choices[3].choice = exambrain.arr.get(i+4); 
+    				for(int j = 1; j<=4; j++)
+    				{
+    					Answer a = new Answer();
+    					a.answer =j;
+        				a.choice = exambrain.arr.get(i+j); 
+        				q.choices[j-1] = a;
+    				}
     				questions.add(q);
     			}
     			else
@@ -60,6 +65,7 @@ public class Exam extends Observable{
     				string = string + exambrain.arr.get(i);
     			}
 			}       
+    	correctAnswers=getCorrectAnswer(string);
 	}
 		
 
@@ -67,17 +73,11 @@ public class Exam extends Observable{
 	{
 		return questions;
 	}
-	public int[] getStudentAnswers()
+
+	public int[] getCorrectAnswer(String string)
 	{
-		return studentAnswers;
-	}
-	public void setStudentAnswers(int[] i)
-	{
-		studentAnswers = i;
-	}
-	public int[] getCorrectAnswer()
-	{
-		String[] parts = string.split("|");
+		String delims = "[|]";
+		String[] parts =  string.split(delims);
 	    int result[] = new int[questionNum];
 		for(int i=0 ;i< questionNum; i++)
 		{
