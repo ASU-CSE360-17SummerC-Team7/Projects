@@ -13,14 +13,21 @@
 
 package CSE360;
 
+import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 
 public class Project7 extends JFrame {
 	
@@ -28,10 +35,25 @@ public class Project7 extends JFrame {
 	private ExamPanel examPanel;
 
 	public Project7(String fPath) {
+		String s = (String)JOptionPane.showInputDialog(
+	            null,
+	            "Please enter your name:\n",
+	            JOptionPane.OK_CANCEL_OPTION);
+
+	//	If a string was returned, say so.
+		if ((s == null) || (s.length() == 0)) {
+			Project7Global.ERROR_MSG("Student did not supply name - giving random name");
+			s="No-name Student";
+		}
+		else if ((s != null) && (s.length() > 0)) {
+			Project7Global.DEBUG_MSG(0,"Student supplied name"+s);
+		}
+
 		setLayout(new GridLayout(1,2));
 		setTitle("Final Project - Team7 (Chen Yang and Pemma Reiter)");
 		setSize(900,900);
-		companionPanel = new CompanionPanel(fPath,"Pemma Reiter");
+		
+		companionPanel = new CompanionPanel(fPath,s); // second parameter is student name
 		add(companionPanel);
 		companionPanel.setVisible(true);
 		companionPanel.drawCompanion();
@@ -39,6 +61,23 @@ public class Project7 extends JFrame {
 		setVisible(true);
 		revalidate();
 		repaint();
+	    this.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent event) {
+	        	//Project7Global.DEBUG_MSG(0, "Closing window");
+	            exitProcedure();
+	            System.exit(0);
+	        }
+	        
+	    });
+	    addMouseListener(new MouseAdapter() {
+
+	    	@Override
+		    public void mouseClicked(MouseEvent e) {
+		       companionPanel.clickMe();
+		    }
+	    });
+	    
 	}
 	public static void main(String[] args){
 		String fPath = null; int fIter;
@@ -53,5 +92,8 @@ public class Project7 extends JFrame {
 		}
 		
 	}
-
+	private void exitProcedure() {
+	    companionPanel.killThread();
+	}
+	
 }

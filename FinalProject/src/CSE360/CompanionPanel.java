@@ -73,8 +73,29 @@ public class CompanionPanel extends JPanel implements Runnable {
 		repaint();
 		Project7Global.DEBUG_MSG(0, "CompanionPanel drawCompanion(): end");
 	}
+	public void clickMe() {
+		staticCompanion.updateForMood(true);
+		if(isMoving) { stopThread(); isMoving=false; movingCompanion.toggleGhostMovement(); }
+		else { startThread(); isMoving=true; movingCompanion.toggleGhostMovement(); }
+	}
+    private void startThread() {
+    	Project7Global.DEBUG_MSG(1,"CompanionPanel: startThread()");
+    	if(moveMe == null) { 
+	        moveMe = new Thread(this);
+	        moveMe.start();
+    	}        
+    }
+    // private helper function: stopGhostMovement
+    // manages stopping the ghost thread to ensure that the thread operates correctly
+    private void stopThread() {
+    	Project7Global.DEBUG_MSG(0,"CompanionPanel: stopThread()");    	
+    	if(moveMe != null) { 
+	        moveMe.interrupt();
+	        while(moveMe.isInterrupted()==true){} // wait until thread has completely been interrupted
+	        moveMe=null; System.gc(); // then delete thread and clean upS
+    	}
+    }
 
-	
 	@Override
 	public void run() {
 		while(true) {
@@ -93,6 +114,11 @@ public class CompanionPanel extends JPanel implements Runnable {
 				return;
 			}
 		}
+	}
+	
+	public void killThread() {
+		stopThread();
+		staticCompanion.killThread();
 	}
 	
 }
