@@ -377,7 +377,8 @@ public class CompanionBrain extends Observable implements Observer {
 		else if(idleCnt>=N_IDLE_COUNT) {
 			Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+") => IsMoving==true");
 			isMoving=true;
-			if(idleCnt > UPPER_BOUNDS_IDLE_COUNT) {
+            // the following was debug code to test the mood transitions before Exam was ready
+			if(Project7Global.DEBUG && (Project7Global.DEBUG_LEVEL==0)  && ( idleCnt > UPPER_BOUNDS_IDLE_COUNT) ) {
 				isMoving=false;
 			    this.resetIdleCounter();
 				updateMood();
