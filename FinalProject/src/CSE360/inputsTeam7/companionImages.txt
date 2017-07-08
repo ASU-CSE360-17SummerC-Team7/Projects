@@ -1,6 +1,6 @@
-ECSTATIC,PERFECT.PNG,ECSTATIC.jpg
-HAPPY,images/HAPPY.jpg,images/MORE_HAPPY.jpg
-OKAY,images/bored.jpg,images/BORED.PNG
+ECSTATIC,images/PERFECT.PNG,images/PERFECT.PNG,images/PERFECT.PNG,images/PERFECT.PNG,images/PERFECT.PNG,images/PERFECT.PNG,images/ECSTATIC.jpg,images/ECSTATIC.jpg,images/ECSTATIC.jpg,images/ECSTATIC.jpg,images/ECSTATIC.jpg,images/ECSTATIC.jpg
+HAPPY,images/HAPPY.jpg,images/HAPPY.jpg,images/HAPPY.jpg,images/HAPPY.jpg,images/HAPPY.jpg,images/HAPPY.jpg,images/MORE_HAPPY.jpg,images/MORE_HAPPY.jpg,images/MORE_HAPPY.jpg,images/MORE_HAPPY.jpg,images/MORE_HAPPY.jpg,images/MORE_HAPPY.jpg
+OKAY,images/bored.jpg,images/bored.jpg,images/bored.jpg,images/bored.jpg,images/BORED.PNG,images/BORED.PNG,images/BORED.PNG,images/BORED.PNG
 INDIFFERENT,images/ghost_up.png,images/ghost_down.png,images/ghost_left.png,images/ghost_right.png
-UNHAPPY,images/frightened.gif,images/CLUELESS.PNG
-GRUMPY,images/grumpy.jpg,images/No.jpg
+UNHAPPY,images/unhappy.jpg,images/unhappy.jpg,images/unhappy.jpg,images/unhappy.jpg,images/unhappy.jpg,images/CLUELESS.PNG,images/CLUELESS.PNG,images/CLUELESS.PNG,images/CLUELESS.PNG
+GRUMPY,images/grumpy.jpg,images/grumpy.jpg,images/grumpy.jpg,images/grumpy.jpg,images/No.jpg,images/No.jpg,images/No.jpg,images/No.jpg

@@ -29,6 +29,8 @@ import javax.swing.JPanel;
 
 public class Companion extends JPanel implements Runnable {
 
+	private static final int IMG_SCALE_Y = 200;
+	private static final int IMG_SCALE_X = 200;
 	private String[] imageIcon;
 	private int imageIndex;
 	private CompanionBrain brain;
@@ -58,13 +60,8 @@ public class Companion extends JPanel implements Runnable {
 
 		time=new JLabel(); updateCurrentTime();
 		Project7Global.DEBUG_MSG(0, "Companion() : brain.image = "+imageIcon[imageIndex]);
-		try {
-			icon = new JLabel(new ImageIcon(ImageIO.read(new File(fPath+"/"+imageIcon[imageIndex]))));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Project7Global.ERROR_MSG("Can't find input file: "+fPath+"/"+imageIcon[imageIndex]);
-			e.printStackTrace();
-		}
+		icon = new JLabel(new ImageIcon((new ImageIcon(fPath+"/"+imageIcon[imageIndex]).getImage().getScaledInstance(IMG_SCALE_X, IMG_SCALE_Y,
+		            java.awt.Image.SCALE_SMOOTH)),"Meh"));
 		
 		GridBagConstraints c=new GridBagConstraints(); // this section is heavily influenced by Java GridBagLayout tutorial
 		c.weightx=0.333333;c.weighty=1;c.fill=GridBagConstraints.BOTH;
@@ -107,22 +104,13 @@ public class Companion extends JPanel implements Runnable {
     	// if mood changed, then reset imageIndex and setIcon to appropriate image
     	if(moodChanged) { 
     		imageIndex=0;
-    		try {
-				icon.setIcon(new ImageIcon(ImageIO.read(new File(fPath+"/"+imageIcon[imageIndex]))));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		icon.setIcon(new ImageIcon((new ImageIcon(fPath+"/"+imageIcon[imageIndex]).getImage().getScaledInstance(IMG_SCALE_X, IMG_SCALE_Y,
+			        java.awt.Image.SCALE_SMOOTH)),"Meh"));
     	} else if(imageIcon.length>1) { // should only update image if there are more than one [animated] 
         	imageIndex = (++imageIndex)%imageIcon.length;
-            try {
-				Project7Global.DEBUG_MSG(0,"getting new image from "+fPath+"/"+imageIcon[imageIndex]+" (index : "+Integer.toString(imageIndex)+")");
-				icon.setIcon(new ImageIcon(ImageIO.read(new File(fPath+"/"+imageIcon[imageIndex]))));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Project7Global.ERROR_MSG("Unable to read file from "+fPath+"/"+imageIcon[imageIndex]+" (index : "+Integer.toString(imageIndex)+")");
-				e.printStackTrace();
-			}
+            Project7Global.DEBUG_MSG(0,"getting new image from "+fPath+"/"+imageIcon[imageIndex]+" (index : "+Integer.toString(imageIndex)+")");
+			icon.setIcon(new ImageIcon((new ImageIcon(fPath+"/"+imageIcon[imageIndex]).getImage().getScaledInstance(IMG_SCALE_X, IMG_SCALE_Y,
+			        java.awt.Image.SCALE_SMOOTH)),"Meh"));
     	}
     }
     private void startCompanionThread() {

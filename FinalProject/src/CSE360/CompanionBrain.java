@@ -56,7 +56,8 @@ public class CompanionBrain extends Observable implements Observer {
 	private static final int N_IDLE_COUNT = 50;
 
 	private static final int L_TIMES_Q_ANSWERED = 2;
-
+	
+	private static final int UPPER_BOUNDS_IDLE_COUNT = 80;
 	
     //-------------------------------------------------------------------------------------------------------	
 	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class
@@ -65,6 +66,7 @@ public class CompanionBrain extends Observable implements Observer {
 	public final static String[] CITIES = { "Tempe", "NY", "Bangalore",
 	  "Venice", "Dublin", "SFO", "Berlin", "London",
 	  "Mexico", "Delhi" };
+
 	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class	   
 	private void initializeCityData() {
 	  cityData.put(CITIES[0], "33.424564,-111.928001");    
@@ -183,9 +185,8 @@ public class CompanionBrain extends Observable implements Observer {
                 String[] parsed = l.split(delim);
                 readState=parsed[0];
                 List<String> imageList = new ArrayList<String>();
-    			if(Project7Global.DEBUG) { 
-    				System.out.println("parsed line: ["+parsed[0]+"] ");
-    			}
+                Project7Global.DEBUG_MSG(0,"parsed line: ["+parsed[0]+"] ");
+    			
                 for (int i=1;i<parsed.length;i++) { 
                 	imageList.add(i-1,parsed[i]);
                 	Project7Global.DEBUG_MSG(0,Integer.toString(i)+" : ["+parsed[i]+"] ");
@@ -376,6 +377,12 @@ public class CompanionBrain extends Observable implements Observer {
 		else if(idleCnt>=N_IDLE_COUNT) {
 			Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+") => IsMoving==true");
 			isMoving=true;
+			if(idleCnt > UPPER_BOUNDS_IDLE_COUNT) {
+				isMoving=false;
+			    this.resetIdleCounter();
+				updateMood();
+				updateForMood();
+			}
 		}
 	}
 
@@ -473,7 +480,7 @@ public class CompanionBrain extends Observable implements Observer {
 		String[] geoLoc = cityData.get(cityName).split(",");
 		latitude= Double.parseDouble(geoLoc[0]);
 		longitude= Double.parseDouble(geoLoc[1]);
-		if(idleCounter%100==0) { 
+		if(idleCounter%UPPER_BOUNDS_IDLE_COUNT==0) { 
 			Team7WeatherInfo weather= new Team7WeatherInfo(latitude,longitude);
 			wsummary=weather.getWeatherFieldString("currently", "summary");
 			wtemp=weather.getWeatherFieldString("currently", "temperature");
