@@ -60,7 +60,7 @@ public class CompanionBrain extends Observable implements Observer {
 
 	private static final int M_IDLE_COUNT =10;
 
-	private static final int N_IDLE_COUNT = 25;
+	private static final int N_IDLE_COUNT = 50;
 
 	private static final int L_TIMES_Q_ANSWERED = 2;
 	   
@@ -101,7 +101,16 @@ public class CompanionBrain extends Observable implements Observer {
     	currentImg=moodImages.get(currentMood);
     	currentState=CompanionState.WELCOME;
     	currentMsg=getRandomStateResponse(currentState);
-		if(Project7Global.DEBUG&&Project7Global.DEBUG_LEVEL==0) {
+		cityName=getRandomCity();
+		String[] geoLoc = cityData.get(cityName).split(",");
+		latitude= Double.parseDouble(geoLoc[0]);
+		longitude= Double.parseDouble(geoLoc[1]);
+		Team7WeatherInfo weather= new Team7WeatherInfo(latitude,longitude);
+		wsummary=weather.getWeatherFieldString("currently", "summary");
+		wtemp=weather.getWeatherFieldString("currently", "temperature");
+		currentTime = Time.valueOf(LocalDateTime.now().toLocalTime());
+
+    	if(Project7Global.DEBUG&&Project7Global.DEBUG_LEVEL==0) {
 			printAllMessages();
 			printAllImages();
 		}
@@ -303,17 +312,22 @@ public class CompanionBrain extends Observable implements Observer {
 	}
 
 	private String getWeatherLocation() {
-	    return "Tempe, AZ";
+	    return cityName;
 	}
 	private String getWeatherTemperature() {
-	    return "100 degrees";
+	    return wtemp;
 	}
 	private String getWeatherSummary() {
-	    return "Sunny";	
+	    return wsummary;	
 	}
 
 	private String getCurrentTime() {
-		return "5:00pm";
+		String time="";
+		if(currentTime != null) {
+		 String am_pm=(currentTime.getHours()>12)?"pm":"am";
+		 time = Integer.toString((int)(currentTime.getHours()%12))+":"+Integer.toString(currentTime.getMinutes())+am_pm;
+		}
+		return time;
 	}
 
 	private String getElapsedTimeForQuestion() {

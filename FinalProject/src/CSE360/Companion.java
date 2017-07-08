@@ -123,9 +123,9 @@ public class Companion extends JPanel implements Runnable {
     	}
     }
     private void startCompanionThread() {
-    	isRunning=true;
+     	isRunning=true;
     	if(animation == null) { 
-	        setVisible(true);
+	        setVisible(true);   
 	        animation = new Thread(this);
 	        animation.start();
     	}        
@@ -133,8 +133,9 @@ public class Companion extends JPanel implements Runnable {
     // private helper function: stopGhostMovement
     // manages stopping the ghost thread to ensure that the thread operates correctly
     private void stopCompanionThread() {
+    	isRunning=false;
     	if(animation != null) { 
-	        setVisible(false);
+	        setVisible(false); 
 	        animation.interrupt();
 	        while(animation.isInterrupted()==true){} // wait until thread has completely been interrupted
 	        animation=null; System.gc(); // then delete thread and clean upS
@@ -164,8 +165,10 @@ public class Companion extends JPanel implements Runnable {
             	isRunning=false;
                 return; // we've been interrupted, no more thread execution
             }
-        }
-			
+        }	
+	}
+	public void killThread() {
+		this.stopCompanionThread();
 	}
 }
 
