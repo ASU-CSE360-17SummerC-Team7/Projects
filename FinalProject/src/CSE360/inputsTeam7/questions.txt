@@ -1,0 +1,21 @@
+1. how is your summer?
+awesome
+almost dead
+enjoyable
+hard to tell
+2. do you like CSE360?
+not at all
+so so
+not bad
+kind of
+3. what the weather today?
+sunny
+rain
+cloudy
+can't tell
+4. how is your summer?
+awesome
+almost dead
+enjoyable
+hard to tell
+1|2|3|4

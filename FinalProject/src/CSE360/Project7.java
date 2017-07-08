@@ -52,7 +52,7 @@ public class Project7 extends JFrame {
 		setLayout(new GridLayout(2,1));
 		setTitle("Final Project - Team7 (Chen Yang and Pemma Reiter)");
 		setSize(900,900);
-		examPanel = new ExamPanel();
+		examPanel = new ExamPanel(fPath);
 
 		companionPanel = new CompanionPanel(fPath,s); // second parameter is student name
 		add(examPanel);

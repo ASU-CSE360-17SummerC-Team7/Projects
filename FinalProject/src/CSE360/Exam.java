@@ -29,9 +29,9 @@ public class Exam extends Observable{
 	private int questionNum;
 	private String string;
 	
-	public Exam()
+	public Exam(String fPath)
 	{
-		exambrain = new ExamBrain();
+		exambrain = new ExamBrain(fPath);
 		questionNum = 0;
 		correctAnswers = new int [questionNum];
 		

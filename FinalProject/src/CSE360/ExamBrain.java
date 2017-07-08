@@ -21,8 +21,11 @@ import java.util.Scanner;
 public class ExamBrain {
 	ArrayList<String> arr;
 	String string;
-	public ExamBrain()
+	String fPath;
+	public ExamBrain(String p)
 	{
+		fPath=p;
+	System.out.print("ExamBrain");
 	arr = new ArrayList<String>();
 	readFile(arr);
 	string = "hello";
@@ -33,7 +36,7 @@ public class ExamBrain {
 	{	
     	try
     	{
-    		Scanner scanner = new Scanner(new File("questions.txt"));         
+    		Scanner scanner = new Scanner(new File(fPath+"/"+"questions.txt"));         
             while (scanner.hasNextLine()) 
             {
                 arr.add(scanner.nextLine());

@@ -40,13 +40,13 @@ public class ExamPanel extends JPanel {
 	//private int[] studentAnswers;
 	
 	//constructor
-	public ExamPanel()
+	public ExamPanel(String f)
 	{
-		setSize(500,500);
-		JFrame main = new JFrame();
-		main.setLayout(new BorderLayout());
+		setSize(900,450);
+		//JFrame main = new JFrame();
+		//main.setLayout(new BorderLayout());
 		//main.setSize(500, 500);
-		exam =  new Exam();
+		exam =  new Exam(f);
 		p = new oneProPanel[exam.getNumOfQuest()];
 		copyQuestion = exam.getQuestion();
 		setLayout(new GridLayout(2,1));
@@ -73,9 +73,9 @@ public class ExamPanel extends JPanel {
 		//title.setSize(500,100);
 		spane= new JScrollPane(totPro);
 		//spane.setSize(500,400);
-		setLayout(new GridLayout((exam.getNumOfQuest()+1),1));
-		add(title, BorderLayout.NORTH);
-		add(spane, BorderLayout.CENTER);
+		//setLayout(new GridLayout((exam.getNumOfQuest()+1),1));
+		add(title);
+		add(spane);
 	}
 	public int[] getStudentAnswers()
 	{
