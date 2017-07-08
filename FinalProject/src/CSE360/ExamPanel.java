@@ -24,6 +24,7 @@ public class ExamPanel extends JPanel {
 	private JScrollPane spane;
 	private int[] stuA;
 	private int eachPchoice;
+
 	//private int[] studentAnswers;
 	
 	//constructor

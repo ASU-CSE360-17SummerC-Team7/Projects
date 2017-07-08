@@ -51,13 +51,13 @@ public class CompanionBrain extends Observable implements Observer {
 	
 	private double finalScore;
 
-	private static final int M_IDLE_COUNT =10;
+	private static final int M_IDLE_COUNT =1;
 
-	private static final int N_IDLE_COUNT = 50;
+	private static final int N_IDLE_COUNT = 5;
 
 	private static final int L_TIMES_Q_ANSWERED = 2;
 	
-	private static final int UPPER_BOUNDS_IDLE_COUNT = 80;
+	private static final int UPPER_BOUNDS_IDLE_COUNT = 8;
 	
     //-------------------------------------------------------------------------------------------------------	
 	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class
@@ -113,7 +113,7 @@ public class CompanionBrain extends Observable implements Observer {
 		wsummary=weather.getWeatherFieldString("currently", "summary");
 		wtemp=weather.getWeatherFieldString("currently", "temperature");
 		currentTime = Time.valueOf(LocalDateTime.now().toLocalTime());
-		blackboard = Blackboard.getInstance();
+		blackboard = Blackboard.getInstance(); blackboard.addObserver(this);
 
     	if(Project7Global.DEBUG&&Project7Global.DEBUG_LEVEL==0) {
 			printAllMessages();
@@ -349,7 +349,7 @@ public class CompanionBrain extends Observable implements Observer {
 	// these are original functions
 	
 	public void updateMood() {
-		currentMood = CompanionMood.intToCompanionMood(CompanionMood.ToInt(currentMood)+1);
+		currentMood = CompanionMood.intToCompanionMood((CompanionMood.ToInt(currentMood)+1)%5);
 	}
 
 	public void showFace(boolean madORhappy) {
@@ -378,7 +378,8 @@ public class CompanionBrain extends Observable implements Observer {
 			Project7Global.DEBUG_MSG(1, "CompanionBrain::handleIdleEvent("+Integer.toString(idleCnt)+") => IsMoving==true");
 			isMoving=true;
             // the following was debug code to test the mood transitions before Exam was ready
-			if(Project7Global.DEBUG && (Project7Global.DEBUG_LEVEL==0)  && ( idleCnt > UPPER_BOUNDS_IDLE_COUNT) ) {
+			//if(Project7Global.DEBUG && (Project7Global.DEBUG_LEVEL==0)  &&
+			if( ( idleCnt > UPPER_BOUNDS_IDLE_COUNT) ) {
 				isMoving=false;
 			    this.resetIdleCounter();
 				updateMood();
@@ -389,6 +390,7 @@ public class CompanionBrain extends Observable implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		Project7Global.DEBUG_MSG(6, "CompanionBrain::update(Observable ob, Objects)");
         Blackboard blackboard=(Blackboard)arg0;
         resetIdleCounter();
 		int numCorrect=blackboard.getNumberOfCorrectAnswers();

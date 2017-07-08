@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -25,8 +26,10 @@ public class oneProPanel extends JPanel{
 	private int stuAns;
 	public boolean sut;
 	
+
 	public oneProPanel(Question q, String f)
 	{
+
 		//create question label
 		exam = Exam.getInstance(f);
 		stuAns = 0; 
@@ -81,8 +84,11 @@ public class oneProPanel extends JPanel{
 
 private class ChoiceListener implements ActionListener
 {
+	
 	public void actionPerformed(ActionEvent event) {
-			//Answer answer = new Answer();
+		Blackboard bb = Blackboard.getInstance();
+	
+		//Answer answer = new Answer();
 			Object source = event.getSource();
 			if(source == ans1)
 			{
@@ -115,11 +121,19 @@ private class ChoiceListener implements ActionListener
 private class ButtonListener implements ActionListener
 {
 	public void actionPerformed(ActionEvent event) {
+		Blackboard b = Blackboard.getInstance();
 		Object source = event.getSource();
 		if(source == save)
 		{
 			//save.setEnabled(false);
 			save.setForeground(Color.PINK);
+			Project7Global.DEBUG_MSG(5, "Save event in Exam Panel");
+     		Random r = new Random();
+     		// generate a random number between 0 and the # of moodMessages for that particular state
+     		int randBoolean = r.nextInt(100); 
+     		int randQuestionNumber = r.nextInt(10);
+			b.update("save", ((randBoolean%2)==0), randQuestionNumber);
+
 		}
 		if(source == submit)
 		{
@@ -127,6 +141,13 @@ private class ButtonListener implements ActionListener
 			exam.setSubmit(sut);
 			System.out.println("submit button is pushed");
 			System.out.println(exam.getsubmit());
+			Project7Global.DEBUG_MSG(5, "Submission event in Exam Panel");
+     		Random r = new Random();
+     		// generate a random number between 0 and the # of moodMessages for that particular state
+     		int randBoolean = r.nextInt(1); 
+     		int randQuestionNumber = r.nextInt(10);			
+			b.update("submit", ((randBoolean%2)==0), randQuestionNumber);
+
 		}		
 	}
 

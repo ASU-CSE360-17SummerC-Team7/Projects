@@ -78,8 +78,6 @@ public class CompanionPanel extends JPanel implements Runnable {
 	}
 	public void clickMe() {
 		staticCompanion.updateForMood(true);
-		if(isMoving) { stopThread(); isMoving=false; movingCompanion.toggleGhostMovement(); }
-		else { startThread(); isMoving=true; movingCompanion.toggleGhostMovement(); }
 	}
     private void startThread() {
     	Project7Global.DEBUG_MSG(1,"CompanionPanel: startThread()");

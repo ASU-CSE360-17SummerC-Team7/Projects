@@ -21,6 +21,7 @@ import java.util.Observer;
 
 public class Blackboard extends Observable implements Observer {
 
+	private static final int MAX_SEL_QUESTION = 2;
 	private Time[] answerTime;
 	private boolean[] correctlyAnsweredQuestion;
 	private int qNum; // this is the current Question Number
@@ -30,6 +31,7 @@ public class Blackboard extends Observable implements Observer {
 	private boolean submitEvent;
 	private boolean saveEvent;
 	private boolean chooseEvent;
+	private boolean needsHint;
 	private String nameOfTestee;
 	private Question currentQuestion;
 	private ExamPanel examPanel;
@@ -39,11 +41,15 @@ public class Blackboard extends Observable implements Observer {
 	private int numAnsweredQuestions;
 	private static Blackboard _instance;
 	public static Blackboard getInstance() { 
-		if(_instance == null) { _instance = new Blackboard();}
+		if(_instance == null) {
+			_instance = new Blackboard();
+			Project7Global.DEBUG_MSG(6, "Blackboard::getInstance()");
+		}
 		return _instance;
 	}
 	
 	protected Blackboard() {
+		Project7Global.DEBUG_MSG(9, "Blackboard::Blackboard()");
 		SetStartTime();
 		ClearSubmitEvent();
 		ClearSaveEvent();
@@ -52,6 +58,7 @@ public class Blackboard extends Observable implements Observer {
 		correctlyAnsweredQuestion = null;
 		totalQuestions = 10;
 		selectionCounter = new int[totalQuestions];
+		initializeArrays(totalQuestions);
 		for (int i = 0; i < totalQuestions; i++) {
 			selectionCounter[i] = 0;
 		}
@@ -61,6 +68,7 @@ public class Blackboard extends Observable implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -68,8 +76,23 @@ public class Blackboard extends Observable implements Observer {
 		examPanel = e;
 	}
 
-	public void update() {
-
+	public void update(String event_type, boolean correct, int questionAnswered) {
+		Project7Global.DEBUG_MSG(5, "Blackboard::update("+event_type+","+Boolean.toString(correct)+","+Integer.toString(questionAnswered)+");");
+		this.SetCurrentQuestionNumber(questionAnswered);
+		this.updateSelectionCounter();
+		if (event_type == "save") {
+			this.SetSaveEvent();
+			this.setCorrectlyAnsweredQuestion(questionAnswered, correct);
+		}
+		if(event_type == "submit") {
+			this.SetSubmitEvent();
+			this.setCorrectlyAnsweredQuestion(questionAnswered, correct);
+		}
+		if(this.getSelectionCounter(questionAnswered)>MAX_SEL_QUESTION) { 
+		   this.needsHint=true;
+		}
+		this.SetChooseEvent();
+		this.notifyObservers();
 	}
 
 	public double calculateScore() {
