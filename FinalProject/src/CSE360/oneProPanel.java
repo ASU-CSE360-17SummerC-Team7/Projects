@@ -18,15 +18,17 @@ import javax.swing.JTextField;
 //import ExamPanel.ChoiceListener;
 
 public class oneProPanel extends JPanel{
+	private Exam exam;
 	private JLabel questionl;
 	private JRadioButton ans1,ans2,ans3,ans4;
 	private JButton save, submit;
 	private int stuAns;
 	public boolean sut;
 	
-	public oneProPanel(Question q)
+	public oneProPanel(Question q, String f)
 	{
 		//create question label
+		exam = Exam.getInstance(f);
 		stuAns = 0; 
 		sut = false;
 		questionl = new JLabel(q.question);
@@ -105,31 +107,27 @@ private class ChoiceListener implements ActionListener
 				stuAns = 4;
 				//answer.answer = 4;
 				ans4.setForeground(Color.RED);
-			}				
+			}	
+			exam.setStuAns(stuAns);
 	}
 	
 }
 private class ButtonListener implements ActionListener
 {
 	public void actionPerformed(ActionEvent event) {
-		Object source = new Object();
+		Object source = event.getSource();
 		if(source == save)
 		{
-			save.setEnabled(false);
-			save.setBackground(Color.GRAY);
+			//save.setEnabled(false);
+			save.setForeground(Color.PINK);
 		}
 		if(source == submit)
 		{
-			sut = true;//main.removeAll();			
+			sut = true;//main.removeAll();
+			exam.setSubmit(sut);
+			System.out.println("submit button is pushed");
+			System.out.println(exam.getsubmit());
 		}		
 	}
-public int getStuAnsForOnePro()
-{
-	return stuAns;
-}
-public boolean state()
-{
-	return sut;
-}
-}
-}
+
+}}

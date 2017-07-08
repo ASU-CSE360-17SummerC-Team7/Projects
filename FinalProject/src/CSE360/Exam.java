@@ -28,12 +28,19 @@ public class Exam extends Observable{
 	private ExamBrain exambrain;
 	private int questionNum;
 	private String string;
+	private ArrayList<Integer> stuA;
+	private boolean submit;
+	private static Exam _instance;
+	public static Exam getInstance(String fPath) { 
+		if(_instance == null) { _instance = new Exam(fPath);}
+		return _instance;
+	}
 	
-	public Exam(String fPath)
+	private Exam(String fPath)
 	{
+		submit = false;
 		exambrain = new ExamBrain(fPath);
 		questionNum = 0;
-		correctAnswers = new int [questionNum];
 		
 		questions = new ArrayList<Question>();
 		string = "";
@@ -64,7 +71,9 @@ public class Exam extends Observable{
     			{   				
     				string = string + exambrain.arr.get(i);
     			}
-			}       
+			}      
+		correctAnswers = new int [questionNum];
+		stuA = new ArrayList<Integer>();
     	correctAnswers=getCorrectAnswer(string);
 	}
 		
@@ -84,6 +93,20 @@ public class Exam extends Observable{
 			 result[i] = Integer.parseInt(parts[i]);
 		}
 		return result;
+	}
+	public void setStuAns(int i)
+	{
+		stuA.add(i);
+		setChanged();
+	}
+	public void setSubmit(boolean s)
+	{
+		submit = s;
+		setChanged();
+	}
+	public boolean getsubmit()
+	{
+		return submit;
 	}
 	public int getNumOfQuest()
 	{

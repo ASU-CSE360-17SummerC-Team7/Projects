@@ -1,16 +1,3 @@
-/**
- *
- * @author 
- * filename: 
- * creation date: 06/30/2017
- * description: 
- * Team members:
- *  - Chen Yang (cyang112@asu.edu)
- *  - Pemma Reiter (pdreiter@asu.edu)
- *  Notes from author: astah profession created the initial barebones class
- *
- */
-
 package CSE360;
 
 import javax.swing.*;
@@ -42,43 +29,49 @@ public class ExamPanel extends JPanel {
 	//constructor
 	public ExamPanel(String f)
 	{
-		setSize(900,450);
+		
 		//JFrame main = new JFrame();
 		//main.setLayout(new BorderLayout());
 		//main.setSize(500, 500);
-		exam =  new Exam(f);
-		p = new oneProPanel[exam.getNumOfQuest()];
-		copyQuestion = exam.getQuestion();
-		setLayout(new GridLayout(2,1));
-		stuA = new int[exam.getNumOfQuest()];
-		//studentAnswers = new int [exam.getNumOfQuest()];
-
-		
-		for(int i =0; i<exam.getNumOfQuest(); i++)
+		exam = Exam.getInstance(f);
+		if(exam.getsubmit())
 		{
-			eachQuestion =  copyQuestion.remove(0);
-			p[i]= new oneProPanel(eachQuestion);
-			//stuA[i] = (p[i]).
+			System.out.print("check submit");
+			removeAll();
+			add(new JLabel("SUMMER CSE360 online exam project----you are finished"));
 		}
-		
-		JPanel totPro = new JPanel();
-		totPro.setLayout(new GridLayout(exam.getNumOfQuest(),1));
-		for(int i =0; i<exam.getNumOfQuest(); i++)
+		else
 		{
-			totPro.add(p[i]);
+			removeAll();
+			p = new oneProPanel[exam.getNumOfQuest()];
+			copyQuestion = exam.getQuestion();
+			setLayout(new GridLayout(2,1));
+			stuA = new int[exam.getNumOfQuest()];
+			//studentAnswers = new int [exam.getNumOfQuest()];
+	
+			
+			for(int i =0; i<exam.getNumOfQuest(); i++)
+			{
+				eachQuestion =  copyQuestion.remove(0);
+				p[i]= new oneProPanel(eachQuestion, f);
+				//stuA[i] = (p[i]).
+			}
+			
+			JPanel totPro = new JPanel();
+			totPro.setLayout(new GridLayout(exam.getNumOfQuest(),1));
+			for(int i =0; i<exam.getNumOfQuest(); i++)
+			{
+				totPro.add(p[i]);
+			}
+			
+			//finally...
+			title = new JLabel("SUMMER CSE360 online exam project----in process");
+			//title.setSize(500,100);
+			spane= new JScrollPane(totPro);
+			//spane.setSize(500,400);
+			//setLayout(new GridLayout((exam.getNumOfQuest()+1),1));
+			add(title);
+			add(spane);
 		}
-		
-		//finally...
-		title = new JLabel("SUMMER CSE360 online exam project----in process");
-		//title.setSize(500,100);
-		spane= new JScrollPane(totPro);
-		//spane.setSize(500,400);
-		//setLayout(new GridLayout((exam.getNumOfQuest()+1),1));
-		add(title);
-		add(spane);
-	}
-	public int[] getStudentAnswers()
-	{
-		return stuA;
 	}
 }
