@@ -87,8 +87,11 @@ public class Team7WeatherInfo {
     public String getWeatherFieldString(String timeType, String wkey){
         if ( !isValid_TimeType(timeType) ) { return "ERROR: Invalid timeType (valid: currently) (deprecated: minutely, hourly, daily)"; }
         else if ( !isValid_WeatherInfoKey(wkey)) {  return "ERROR: Invalid weather key";  }
-        else { 
+        else {
+        	if(darksky==null) { return "DarkSky is down! :("; }
             if(isWeatherInfoKey_String(wkey)) { 
+            	Project7Global.DEBUG_MSG(5, "getWeatherFieldString: Got info from "+ timeType+","+wkey);
+              
               return darksky.getJSONObject(timeType).getString(wkey); 
             }
             else { 
@@ -107,7 +110,11 @@ public class Team7WeatherInfo {
                 +excludeBlocks;
         //System.out.print(darkSKYURL_ForecastRequest);
         try { darksky = readJSONFromURL(darkSKYURL_ForecastRequest); }
-        catch(IOException e) {} // ignoring exceptions for now
+        catch(IOException e) {
+        	 // ignoring exceptions for now
+        	Project7Global.ERROR_MSG("Getting an IO exception for DarkSkyJSONObject: Unable to open darkSKYURL");
+        }
+        Project7Global.DEBUG_MSG(5, "updateDarkSKYJSONObject: Got info from "+ String.valueOf(this.latitude)+","+String.valueOf(this.longitude));
     }
     // reusing the provided StringBuilder method provided by Rao 
     //[originally in CSE360 L06 - recitation 02.pdf, Main.java example]

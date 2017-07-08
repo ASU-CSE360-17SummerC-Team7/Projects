@@ -32,7 +32,7 @@ public class CompanionBrain extends Observable implements Observer {
 	private CompanionState currentState;
 	private Time     currentTime;
 	// removing to keep everything in the update function
-	// private Blackboard blackboard;
+	private Blackboard blackboard;
 	// these class variables have been added since inception of class diagram
 
 	private int idleCounter;
@@ -111,6 +111,7 @@ public class CompanionBrain extends Observable implements Observer {
 		wsummary=weather.getWeatherFieldString("currently", "summary");
 		wtemp=weather.getWeatherFieldString("currently", "temperature");
 		currentTime = Time.valueOf(LocalDateTime.now().toLocalTime());
+		blackboard = Blackboard.getInstance();
 
     	if(Project7Global.DEBUG&&Project7Global.DEBUG_LEVEL==0) {
 			printAllMessages();
@@ -472,9 +473,11 @@ public class CompanionBrain extends Observable implements Observer {
 		String[] geoLoc = cityData.get(cityName).split(",");
 		latitude= Double.parseDouble(geoLoc[0]);
 		longitude= Double.parseDouble(geoLoc[1]);
-		Team7WeatherInfo weather= new Team7WeatherInfo(latitude,longitude);
-		wsummary=weather.getWeatherFieldString("currently", "summary");
-		wtemp=weather.getWeatherFieldString("currently", "temperature");
+		if(idleCounter%100==0) { 
+			Team7WeatherInfo weather= new Team7WeatherInfo(latitude,longitude);
+			wsummary=weather.getWeatherFieldString("currently", "summary");
+			wtemp=weather.getWeatherFieldString("currently", "temperature");
+		}
 		currentTime = Time.valueOf(LocalDateTime.now().toLocalTime());
 	}
 	
