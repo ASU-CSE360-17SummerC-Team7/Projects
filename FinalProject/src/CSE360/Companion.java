@@ -42,9 +42,10 @@ public class Companion extends JPanel implements Runnable {
 	private JButton hintButton;
     
 	    
-	public Companion(CompanionBrain b, String fPath, int w, int h) {
+	public Companion(CompanionBrain b, String fPath_input, int w, int h) {
 		Project7Global.DEBUG_MSG(0, "Companion() : start");
 		Project7Global.DEBUG_MSG(0, "Companion() : width ["+Integer.toString(w)+"], height ["+Integer.toString(h)+"]");
+		fPath=fPath_input;
 		this.setLayout(new GridBagLayout());
 		this.setPreferredSize(new Dimension(w,h));
 		this.setSize(w,h);
@@ -113,11 +114,13 @@ public class Companion extends JPanel implements Runnable {
 				e.printStackTrace();
 			}
     	} else if(imageIcon.length>1) { // should only update image if there are more than one [animated] 
-        	imageIndex = (imageIndex++)%imageIcon.length;
+        	imageIndex = (++imageIndex)%imageIcon.length;
             try {
+				Project7Global.DEBUG_MSG(0,"getting new image from "+fPath+"/"+imageIcon[imageIndex]+" (index : "+Integer.toString(imageIndex)+")");
 				icon.setIcon(new ImageIcon(ImageIO.read(new File(fPath+"/"+imageIcon[imageIndex]))));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				Project7Global.ERROR_MSG("Unable to read file from "+fPath+"/"+imageIcon[imageIndex]+" (index : "+Integer.toString(imageIndex)+")");
 				e.printStackTrace();
 			}
     	}
@@ -158,8 +161,8 @@ public class Companion extends JPanel implements Runnable {
                 updateForMood((++i%20) == 0); // force message update every 2 seconds
                 updateCurrentTime();
                 repaint();
-                //pause for 0.1 seconds
-                animation.sleep(100);updateIdleCounter();
+                //pause for 1 second
+                animation.sleep(1000);updateIdleCounter();
                 i=i%100; 
             } catch (InterruptedException ex) {
             	isRunning=false;

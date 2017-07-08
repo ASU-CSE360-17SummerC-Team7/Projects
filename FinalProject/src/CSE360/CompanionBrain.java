@@ -51,19 +51,21 @@ public class CompanionBrain extends Observable implements Observer {
 	
 	private double finalScore;
 
-	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class
-	private Hashtable<String, String> cityData = new Hashtable<String, String>();
-	   
-	public final static String[] CITIES = { "Tempe", "NY", "Bangalore",
-	  "Venice", "Dublin", "SFO", "Berlin", "London",
-	  "Mexico", "Delhi" };
-
 	private static final int M_IDLE_COUNT =10;
 
 	private static final int N_IDLE_COUNT = 50;
 
 	private static final int L_TIMES_Q_ANSWERED = 2;
-	   
+
+	
+    //-------------------------------------------------------------------------------------------------------	
+	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class
+	private Hashtable<String, String> cityData = new Hashtable<String, String>();
+	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class	   
+	public final static String[] CITIES = { "Tempe", "NY", "Bangalore",
+	  "Venice", "Dublin", "SFO", "Berlin", "London",
+	  "Mexico", "Delhi" };
+	// The following CITY lookup was reused from Professor Javier Gonzalez-Sanchez's ControlCenter.java class	   
 	private void initializeCityData() {
 	  cityData.put(CITIES[0], "33.424564,-111.928001");    
 	  cityData.put(CITIES[1], "40.730610,-73.935242");
@@ -77,7 +79,7 @@ public class CompanionBrain extends Observable implements Observer {
 	  cityData.put(CITIES[9], "28.644800,77.216721");
 	}
 	// end of reuse
-	
+    //-------------------------------------------------------------------------------------------------------	
 	
 	// method: getRandomCity()
 	// description: picks a random city from the list of CITIES
@@ -196,7 +198,7 @@ public class CompanionBrain extends Observable implements Observer {
 
     }
 	
-	void addImageEntry(String readState, List<String> readMessage) { 
+	private void addImageEntry(String readState, List<String> readMessage) { 
 		if(readState.matches("(WELCOME|BORED|SLEEPING|WORKING|DONE)")) {
 			Project7Global.DEBUG_MSG(0,"Currently no support of state images");
 		}		
@@ -215,7 +217,7 @@ public class CompanionBrain extends Observable implements Observer {
 		}
 	}
 
-	void addPhraseEntry(String readState, String readMessage) { 
+	private void addPhraseEntry(String readState, String readMessage) { 
 		if(readState.matches("(WELCOME|BORED|SLEEPING|WORKING|DONE)")) {
 			Project7Global.DEBUG_MSG(0,"Processing Line as CompanionState: "+readState+" : "+readMessage);
 			List<String> y = stateMessages.get(CompanionState.StringToCompanionState(readState));

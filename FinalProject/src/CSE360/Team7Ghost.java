@@ -176,6 +176,7 @@ class Team7Ghost extends JPanel implements Runnable
        animation.setIcon(new ImageIcon((new ImageIcon(getFullIconPath()).getImage().getScaledInstance(ghostScale, ghostScale,
                 java.awt.Image.SCALE_SMOOTH)),"Blinky"));
        
+       
     }
     public String getFullIconPath(){ return iconPath+dir+".png";}
 
