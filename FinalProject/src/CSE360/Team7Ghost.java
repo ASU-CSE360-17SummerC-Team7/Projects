@@ -67,6 +67,8 @@ class Team7Ghost extends JPanel implements Runnable
         this.add(animation);
         this.setBounds(0,0,ghostScale,ghostScale);
         this.setSize(xbound,ybound);
+        this.setOpaque(true);
+        this.setBackground(Color.WHITE);
         animation.setVisible(true);
         setVisible(defaultVisibility);
         Project7Global.DEBUG_MSG(0, "Team7Ghost::Team7Ghost("+Integer.toString(xbound)+","+Integer.toString(ybound)+","+imp+")  [end]");

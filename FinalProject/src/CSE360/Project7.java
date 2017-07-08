@@ -14,6 +14,8 @@
 package CSE360;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.MouseAdapter;
@@ -48,15 +50,22 @@ public class Project7 extends JFrame {
 		else if ((s != null) && (s.length() > 0)) {
 			Project7Global.DEBUG_MSG(0,"Student supplied name"+s);
 		}
-
-		setLayout(new GridLayout(2,1));
 		setTitle("Final Project - Team7 (Chen Yang and Pemma Reiter)");
-		setSize(900,900);
+		setSize(900,900);		GridBagConstraints c=new GridBagConstraints(); // this section is heavily influenced by Java GridBagLayout tutorial
+
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c1=new GridBagConstraints(); // this section is heavily influenced by Java GridBagLayout tutorial
+		c1.weightx=0.333333;c1.weighty=1;c1.fill=GridBagConstraints.BOTH;
+		c1.gridx=0;c1.gridy=0;
+		c1.weightx=1;c1.weighty=0.6666;c1.fill=GridBagConstraints.BOTH;
+		c1.gridx=0;c1.gridy=0;
+
 		examPanel = new ExamPanel(fPath);
 
 		companionPanel = new CompanionPanel(fPath,s); // second parameter is student name
-		add(examPanel);
-		add(companionPanel);
+		add(examPanel,c1);
+		c1.gridy=3;
+		add(companionPanel,c1);
 		companionPanel.setVisible(true);
 		companionPanel.drawCompanion();
 		

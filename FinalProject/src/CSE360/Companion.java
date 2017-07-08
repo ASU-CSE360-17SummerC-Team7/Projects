@@ -12,7 +12,9 @@
  */
 package CSE360;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -26,6 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Companion extends JPanel implements Runnable {
 
@@ -35,16 +38,17 @@ public class Companion extends JPanel implements Runnable {
 	private int imageIndex;
 	private CompanionBrain brain;
 	private CompanionMood mood;
-	private JLabel message;
+	private JTextArea message;
 	private JLabel icon;
 	private Thread animation;
 	private boolean isRunning;
-    private static JLabel time;
+    private static JTextArea time;
     private String fPath;
 	private JButton hintButton;
     
 	    
 	public Companion(CompanionBrain b, String fPath_input, int w, int h) {
+		this.setBackground(Color.white);
 		Project7Global.DEBUG_MSG(0, "Companion() : start");
 		Project7Global.DEBUG_MSG(0, "Companion() : width ["+Integer.toString(w)+"], height ["+Integer.toString(h)+"]");
 		fPath=fPath_input;
@@ -54,23 +58,25 @@ public class Companion extends JPanel implements Runnable {
 		imageIndex=0;
 		brain=b;
 		Project7Global.DEBUG_MSG(0, "Companion() : brain.message = "+brain.getMessage());
-		message=new JLabel(brain.getMessage()); 
-		imageIcon = brain.getImage();
+		message=new JTextArea(brain.getMessage()); message.setFont(new Font("Verdana", Font.BOLD, 30)); message.setLineWrap(true);
+		imageIcon = brain.getImage(); 
 		mood = brain.getMood();
-
-		time=new JLabel(); updateCurrentTime();
+		
+		time=new JTextArea(); updateCurrentTime(); time.setLineWrap(true); time.setFont(new Font("Verdana",Font.BOLD,20));
 		Project7Global.DEBUG_MSG(0, "Companion() : brain.image = "+imageIcon[imageIndex]);
 		icon = new JLabel(new ImageIcon((new ImageIcon(fPath+"/"+imageIcon[imageIndex]).getImage().getScaledInstance(IMG_SCALE_X, IMG_SCALE_Y,
 		            java.awt.Image.SCALE_SMOOTH)),"Meh"));
-		
+		icon.setBackground(Color.WHITE);
 		GridBagConstraints c=new GridBagConstraints(); // this section is heavily influenced by Java GridBagLayout tutorial
-		c.weightx=0.333333;c.weighty=1;c.fill=GridBagConstraints.BOTH;
+		c.weightx=0.25;c.weighty=1;c.fill=GridBagConstraints.BOTH;
 		c.gridx=0;c.gridy=0;
 		c.anchor=GridBagConstraints.LINE_START;
 		this.add(icon,c);
-		c.anchor=GridBagConstraints.CENTER;c.gridx=1; 
-		this.add(message,c); 
 		c.anchor=GridBagConstraints.LINE_END;
+		c.gridx=1; c.gridheight=1;c.gridwidth=2; 
+		this.add(message,c);
+//		c.anchor=GridBagConstraints.LINE_END;
+		c.gridx=0;c.gridy=3;c.gridheight=1;c.gridwidth=3;
 		this.add(time,c);
 	
 		message.setPreferredSize(new Dimension(w,h));message.setVisible(true);message.setOpaque(true);

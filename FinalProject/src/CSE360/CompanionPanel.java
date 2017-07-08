@@ -13,6 +13,7 @@
 
 package CSE360;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 
@@ -29,8 +30,8 @@ public class CompanionPanel extends JPanel implements Runnable {
 	private boolean isMoving;
 	Thread moveMe;
 	
-	private final int JPANEL_WIDTH=600;
-	private final int JPANEL_HEIGHT=200;	
+	private final int JPANEL_WIDTH=900;
+	private final int JPANEL_HEIGHT=300;	
 	
 	public CompanionPanel(String fPath, String s) {
 		Project7Global.DEBUG_MSG(0, "CompanionPanel(): start");
@@ -48,6 +49,8 @@ public class CompanionPanel extends JPanel implements Runnable {
 //		add(staticCompanion);
 		jp.setVisible(true);
 		setVisible(true);
+		jp.setBackground(Color.white);
+		this.setBackground(Color.white);
 		jp.revalidate();jp.repaint();
 		//staticCompanion.setVisible(true); staticCompanion.repaint();
 		Project7Global.DEBUG_MSG(0, "CompanionPanel(): Added Moving Companion and Static Companion to LayeredPane");
